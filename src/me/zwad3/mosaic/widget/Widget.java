@@ -11,7 +11,7 @@ public abstract class Widget{
 		parent = a;
 	}
 	
-	public abstract boolean needsUpdate();
+	public abstract boolean needsUpdate(int dt);
 		
 	public abstract Bitmap renderBitmap();
 }

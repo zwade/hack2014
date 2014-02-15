@@ -21,7 +21,7 @@ public class BlankWidget extends Widget {
 	}
 	
 	@Override
-	public boolean needsUpdate() {
+	public boolean needsUpdate(int dt) {
 		return false;
 	}
 
