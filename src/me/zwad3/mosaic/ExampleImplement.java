@@ -6,7 +6,9 @@ import java.util.HashMap;
 
 import android.util.Log;
 import android.view.KeyEvent;
+import me.zwad3.mosaic.widget.ClockWidget;
 import me.zwad3.mosaic.widget.TextWidget;
+import me.zwad3.mosaic.widget.Widget;
 import min3d.Shared;
 import min3d.core.Object3dContainer;
 import min3d.objectPrimitives.Box;
@@ -47,10 +49,10 @@ public class ExampleImplement extends Renderer3D {
 	            Log.d("Tap", "Tap Revolution");
 	            Box tmp = new Box(1,1,1);
 	            Log.d("hi", ""+tmp);
-	            tmp.position().x = 2;
-	            tmp.position().y = 2;
-	            tmp.position().z = 2;
-	            TextWidget txt = new TextWidget();
+	            tmp.position().x = -2;
+	            tmp.position().y = 0;
+	            tmp.position().z = -2;
+	            ClockWidget txt = new ClockWidget();
 	            loadTexture(txt, tmp);
 	            objects.put(tmp, txt);
 	            scene.addChild(tmp);
@@ -79,6 +81,11 @@ public class ExampleImplement extends Renderer3D {
 			return false;
 		}
 		//Shared.textureManager().deleteTextureId(w.renderBitmap(), w.toString(), false);
+		try {
+			Shared.textureManager().deleteTexture(w.toString());
+		} catch (Exception e) {
+			
+		}
 		Shared.textureManager().addTextureId(w.renderBitmap(), w.toString(), false);
 			
 		TextureVo texture = new TextureVo(w.toString());
