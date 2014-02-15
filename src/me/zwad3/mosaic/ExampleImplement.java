@@ -40,6 +40,7 @@ public class ExampleImplement extends Renderer3D {
 	private int DELAY = 1000;
 	
 	private Widget needsUpdate;
+	private Box needsDelete;
 	
 	private float latestCoords[] = new float[6];
 	
@@ -139,6 +140,10 @@ public class ExampleImplement extends Renderer3D {
             scene.addChild(tmp);
             
             needsUpdate = null;
+		} else if (needsDelete != null) {
+			scene.removeChild(needsDelete);
+			objects.remove(needsDelete);
+			needsDelete = null;
 		}
 		long time = Calendar.getInstance().getTime().getTime();
 		long dx = time-lastUpdate;
@@ -230,8 +235,7 @@ public class ExampleImplement extends Renderer3D {
 	        	needsUpdate = new BreakingNewsWidget(this);
 	        	return false;
 	        case R.id.delete:
-	        	scene.removeChild(target);
-	        	objects.remove(target);
+	        	needsDelete = target;
 	        	target = null;
 	        default:
 	            return super.onOptionsItemSelected(item);
