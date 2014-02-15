@@ -53,6 +53,7 @@ public class BitmapActivity extends Renderer3D implements SensorEventListener {
         mCompass = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mAccVals = new Number3d();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        widget = new StickyNoteWidget(this);
 	}
 	/*@Override
 	public void onPause() {
@@ -63,6 +64,7 @@ public class BitmapActivity extends Renderer3D implements SensorEventListener {
 	
 	public void initScene()
 	{
+		Log.d("Initing Scene", "<-- Yup");
 		scene.lights().add(new Light());
 		
 		mSkyBox = new SkyBox(5.0f, 2);
@@ -100,7 +102,6 @@ public class BitmapActivity extends Renderer3D implements SensorEventListener {
 		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
 		mSensorManager.registerListener(this, mCompass, SensorManager.SENSOR_DELAY_UI);
 		
-		widget = new RandomPictureWidget(this);
 		loadTexture(widget);
 	}
 	
