@@ -19,6 +19,8 @@ public class Box extends Object3dContainer
 	private float _height;
 	private float _depth;
 	
+	private float[] _normal;
+	
 
 	public Box(float $width, float $height, float $depth, Color4[] $sixColor4s, Boolean $useUvs, Boolean $useNormals, Boolean $useVertexColors)
 	{
@@ -45,7 +47,6 @@ public class Box extends Object3dContainer
 		
 		make();
 	}
-	
 	public Box(float $width, float $height, float $depth, Color4[] $sixColor4s)
 	{
 		this($width,$height,$depth, $sixColor4s, true,true,true);
@@ -60,7 +61,12 @@ public class Box extends Object3dContainer
 	{
 		this($width,$height,$depth, null,  true,true,true);
 	}
-
+	public void setNormal(float[] n) {
+		_normal = n;
+	}
+	public float[] getNormal() {
+		return _normal;
+	}
 	private void make()
 	{
 		float w = _width / 2f;

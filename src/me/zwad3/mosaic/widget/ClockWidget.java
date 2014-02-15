@@ -8,7 +8,7 @@ import android.graphics.Paint;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class ClockWidget implements Widget {
+public class ClockWidget extends Widget {
 
 	@Override
 	public boolean needsUpdate() {

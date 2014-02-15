@@ -24,7 +24,7 @@ import min3d.objectPrimitives.SkyBox;
 import min3d.vos.Light;
 import min3d.vos.TextureVo;
 
-public class ExampleImplement extends Renderer3D {
+public class ExampleImplement extends MosaicActivity {
 	private SkyBox mSkyBox;
 	private HashMap<Box, Widget> objects;
 	
@@ -33,7 +33,9 @@ public class ExampleImplement extends Renderer3D {
 	
 	private int DELAY = 1000;
 	
-	private boolean needsUpdate = false;
+	private Widget needsUpdate;
+	
+	private float latestCoords[] = new float[6];
 	
 	
 	public void initScene() {
@@ -46,35 +48,45 @@ public class ExampleImplement extends Renderer3D {
 	}
 	public boolean onKeyDown(int keycode, KeyEvent event) {
 	        if (keycode == KeyEvent.KEYCODE_DPAD_CENTER) {
-	            needsUpdate = true;
+	        	latestCoords[0] = scene.camera().target.x;
+	        	latestCoords[1] = scene.camera().target.y;
+	        	latestCoords[2] = scene.camera().target.z;
+	        	latestCoords[3] = scene.camera().position.z;
+	        	latestCoords[4] = scene.camera().position.y;
+	        	latestCoords[5] = scene.camera().position.z;
+	        	
+	        	for (Box b:objects.keySet()) {
+	        		getDistance(b);
+	        	}
+
+	        	runOnUiThread(new Runnable() {
+				    public void run() {
+				        //Toast.makeText(activity, "Hello", Toast.LENGTH_SHORT).show();
+				    	openOptionsMenu();
+				    }
+				});
 	 
 	        }
 	        return super.onKeyDown(keycode, event);
 	}
-	public boolean onTouchEvent(MotionEvent e) {
-		needsUpdate = true;
-		super.onTouchEvent(e);
-		return false;
-	}
 	@Override
 	public void updateScene() {
-		if (needsUpdate) {
-			runOnUiThread(new Runnable() {
-			    public void run() {
-			        //Toast.makeText(activity, "Hello", Toast.LENGTH_SHORT).show();
-			    	openOptionsMenu();
-			    }
-			});
-
-			Log.d("Tap", "Tap Revolution");
-            Box tmp = new Box(1,1,0);
-            tmp.position().x = scene.camera().target.x*5;
-            tmp.position().y = scene.camera().target.y*5;
-            tmp.position().z = scene.camera().target.z*5;
+		Log.d("Camera",""+scene.camera().target.x+" "+scene.camera().target.y+" "+scene.camera().target.z);
+		if (needsUpdate != null) {
+		
+			
+			
+            Box tmp = new Box(2,2,0);
+            tmp.position().x = latestCoords[0]*5;
+            tmp.position().y = latestCoords[1]*5;
+            tmp.position().z = latestCoords[2]*5;
             
-            float x = scene.camera().target.x-scene.camera().position.x;
-            float y = scene.camera().target.y-scene.camera().position.y;
-            float z = scene.camera().target.z-scene.camera().position.z;
+            float x = latestCoords[0]-latestCoords[3];
+            float y = latestCoords[1]-latestCoords[4];
+            float z = latestCoords[2]-latestCoords[5];
+            
+            float normal[] = {x,y,z};
+            tmp.setNormal(normal);
             //Log.d("BOB",""+scene.camera().position.y);
             
             //float den = (float) Math.sqrt(x*x+y*y+z*z);
@@ -85,14 +97,14 @@ public class ExampleImplement extends Renderer3D {
             //tmp.rotation().x = (float) ((float) Math.sin(Math.acos(z/den)*Math.PI/180)*Math.sin(Math.acos(y/den)*Math.PI/180))*360;
             //tmp.rotation().y = (float) ((float) Math.sin(Math.acos(z/den)*Math.PI/180)*Math.cos(Math.acos(x/den)*Math.PI/180))*360;
         
-            Log.d("target and rotation",""+x+" "+y+" "+z+" "+tmp.rotation().x+" "+tmp.rotation().y+" "+tmp.rotation().z);
+            //("target and rotation",""+x+" "+y+" "+z+" "+tmp.rotation().x+" "+tmp.rotation().y+" "+tmp.rotation().z);
             
-            TextWidget txt = new TextWidget();
-            loadTexture(txt, tmp);
-            objects.put(tmp, txt);
+            //TextWidget txt = new TextWidget();
+            loadTexture(needsUpdate, tmp);
+            objects.put(tmp, needsUpdate);
             scene.addChild(tmp);
             
-            needsUpdate = false;
+            needsUpdate = null;
 		}
 		long time = Calendar.getInstance().getTime().getTime();
 		long dx = time-lastUpdate;
@@ -138,16 +150,57 @@ public class ExampleImplement extends Renderer3D {
 	    // Handle item selection.
 	    switch (item.getItemId()) {
 	        case R.id.clock:
-	            return true;
+	        	Log.d("hi", "clock");
+	        	needsUpdate = new ClockWidget();
+	            return false;
+	        case R.id.blank:
+	        	needsUpdate = new TextWidget();
+	        	return false;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
+	 }
+	 
+	 public float getDistance(Box b) {
+		 float n[] = new float[3];
+		 float p[] = new float[3];
+		 float c[] = new float[3];
+		 float t[] = new float[3];
+		 
+		 p[0] = scene.camera().position.x;
+		 p[1] = scene.camera().position.y;
+		 p[2] = scene.camera().position.z;
+		 
+		 c[0] = b.position().x;
+		 c[1] = b.position().y;
+		 c[2] = b.position().z;
+		 
+		 n[0] = -b.getNormal()[0];
+		 n[1] = -b.getNormal()[1];
+		 n[2] = -b.getNormal()[2];
+		 
+		 float normd = (float) Math.sqrt(scene.camera().target.x*scene.camera().target.x+scene.camera().target.y*scene.camera().target.y+scene.camera().target.z*scene.camera().target.z);
+		 
+		 t[0] = scene.camera().target.x/normd;
+		 t[1] = scene.camera().target.y/normd;
+		 t[2] = scene.camera().target.z/normd;
+		 
+		 float dist = -(n[0]*(p[0]-c[0])+n[1]*(p[1]-c[1])+n[2]*(p[2]-c[2]))/(t[0]*n[0]+t[1]*n[1]+t[2]*n[2]);
+		 
+		 
+		 return dist;
+		 
 	 }
 
 	    @Override
 	 public void onOptionsMenuClosed(Menu menu) {
 	        // Nothing else to do, closing the Activity.
-	    finish();
+	    //finish();
 	 }
+		@Override
+		public String getVoiceInput() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	
 }
