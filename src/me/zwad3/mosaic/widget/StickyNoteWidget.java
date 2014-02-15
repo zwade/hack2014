@@ -1,7 +1,5 @@
 package me.zwad3.mosaic.widget;
 
-import java.awt.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;

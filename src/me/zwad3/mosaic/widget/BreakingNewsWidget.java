@@ -26,7 +26,7 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.util.Xml;
 
-public class BreakingNewsWidget implements Widget {
+public class BreakingNewsWidget extends Widget {
 	
 	int t;
 	String[] headlines;
@@ -71,7 +71,7 @@ public class BreakingNewsWidget implements Widget {
 		}
 		return false;
 	}
-
+	
 	@Override
 	public Bitmap renderBitmap() {
 		/*Log.d("...", "rendering...");
