@@ -121,7 +121,7 @@ public class Renderer3D extends MosaicActivity implements SensorEventListener {
   
 			mAccVals.y = (float) (event.values[2] * FILTERING_FACTOR + mAccVals.y * (1.0 - FILTERING_FACTOR));
 			
-        	scene.camera().position.y = mAccVals.y * .3f;
+        	scene.camera().position.y = mAccVals.y * .2f;
         	
         	scene.camera().target.y = -scene.camera().position.y;
         
@@ -152,8 +152,11 @@ public class Renderer3D extends MosaicActivity implements SensorEventListener {
     }
     @Override
 	public void getVoiceInput(VoiceListener v) {
-		displaySpeechRecognizer();
-		_vl = v;
+    	//Log.d("voice request","boo");
+    	if (_vl == null) {
+    		_vl = v;
+    		displaySpeechRecognizer();
+    	}
 		
 	}
 	
@@ -172,6 +175,7 @@ public class Renderer3D extends MosaicActivity implements SensorEventListener {
 	        // Do something with spokenText.
 	        if (_vl != null) {
 	        	_vl.receiveSTT(spokenText);
+	        	_vl = null;
 	        }
 	    }
 	    super.onActivityResult(requestCode, resultCode, data);

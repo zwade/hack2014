@@ -9,6 +9,7 @@
     <string name="splashTitle">Activity Chooser</string>
     <string name="staticp">Static Planes</string>
     <string name="clock">Clock</string>
+    <string name="sticky">Sticky Note</string>
     
 
 </resources>
