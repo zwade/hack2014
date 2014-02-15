@@ -4,5 +4,8 @@
     <string name="app_name">Mosaic</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="glass_voice_trigger">Start Mosaic</string>
+    <string name="text_trig">Start Texture</string>
+    
 
 </resources>

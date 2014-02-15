@@ -1,5 +1,6 @@
 package me.zwad3.mosaic;
 
+import me.zwad3.mosaic.widget.TextWidget;
 import min3d.Shared;
 import min3d.Utils;
 import min3d.core.Object3dContainer;
@@ -21,7 +22,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
 
-public class MainActivity extends RendererActivity implements SensorEventListener {
+public class BitmapActivity extends RendererActivity implements SensorEventListener {
 	private final float FILTERING_FACTOR = .3f;
 	
 	private SkyBox mSkyBox;
@@ -37,6 +38,7 @@ public class MainActivity extends RendererActivity implements SensorEventListene
 	private Object3dContainer _cube;
 	
 	@Override
+	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -65,11 +67,18 @@ public class MainActivity extends RendererActivity implements SensorEventListene
 		mSkyBox.addTexture(SkyBox.Face.Down, 	R.drawable.floor, 		"down");
 		mSkyBox.scale().y = 0.8f;
 		mSkyBox.scale().z = 2.0f;
-		scene.addChild(mSkyBox);
+		//scene.addChild(mSkyBox);
 		
 		Log.d("hi", "init");
 		
+		_cube = new Box(1f,1f,1f);
+		scene.addChild(_cube);
 		
+		//Bitmap b = Utils.makeBitmapFromResourceId(this, R.drawable.uglysquares);
+		//Shared.textureManager().addTextureId(b, "uglysquares", false);
+		//b.recycle();
+		//TextureVo texture = new TextureVo("uglysquares");
+		//_cube.textures().add(texture);
 		
 		//IParser parser = Parser.createParser(Parser.Type.MAX_3DS,
 		//		getResources(), "min3d.sampleProject1:raw/monster_high", true);
@@ -83,6 +92,8 @@ public class MainActivity extends RendererActivity implements SensorEventListene
 			
 		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
 		mSensorManager.registerListener(this, mCompass, SensorManager.SENSOR_DELAY_UI);
+		
+		loadTexture(new TextWidget());
 	}
 	
 	@Override
@@ -108,11 +119,12 @@ public class MainActivity extends RendererActivity implements SensorEventListene
 	    		int dir = getDirection(newDir, _theta);
 	    		
 	    		//azimuth = orientation[0]; // orientation contains: azimuth, pitch and roll
-	    		scene.camera().target.z = (float) Math.sin(orientation[0]);//Math.sin(orientation[0]*180/Math.PI);
-	    		scene.camera().target.x = (float) Math.cos(orientation[0]);//Math.cos(orientation[0]*180/Math.PI);
+	    		//scene.camera().target.z = 1;//(float) Math.sin(orientation[0]);//Math.sin(orientation[0]*180/Math.PI);
+	    		//scene.camera().target.x = 1;//(float) Math.cos(orientation[0]);//Math.cos(orientation[0]*180/Math.PI);
 	    		
+	    		scene.camera().target = _cube.position();
 	    		
-	    		scene.camera().position.z = 0f; 
+	    		scene.camera().position.z = -5f; 
 	    		scene.camera().position.y = 0; 
 	    		
 	    		_theta = orientation[0];
@@ -127,6 +139,19 @@ public class MainActivity extends RendererActivity implements SensorEventListene
 		
 		
 		return 1;
+	}
+	
+	private boolean loadTexture(Widget w) {
+		if (!w.needsUpdate()) {
+			return false;
+		}
+		Shared.textureManager().addTextureId(w.renderBitmap(), w.toString(), false);
+			
+		TextureVo texture = new TextureVo(w.toString());
+
+		_cube.textures().add(texture);
+		
+		return true;
 	}
 
 	/**
