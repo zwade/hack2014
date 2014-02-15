@@ -1,6 +1,6 @@
 package me.zwad3.mosaic;
 
-import me.zwad3.mosaic.widget.TextWidget;
+import me.zwad3.mosaic.widget.*;
 import min3d.Shared;
 import min3d.Utils;
 import min3d.core.Object3dContainer;
@@ -37,6 +37,8 @@ public class BitmapActivity extends RendererActivity implements SensorEventListe
 	private final float _thresh = 10;
 	private Object3dContainer _cube;
 	
+	private Widget widget;
+	
 	@Override
 	
     public void onCreate(Bundle savedInstanceState) {
@@ -48,11 +50,12 @@ public class BitmapActivity extends RendererActivity implements SensorEventListe
         mAccVals = new Number3d();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
-	@Override
+	/*@Override
 	public void onPause() {
-		Log.d("exit", "boo");
-		System.exit(0);
-	}
+		
+		//Log.d("exit", "boo");
+		//System.exit(0);
+	}*/
 	
 	public void initScene()
 	{
@@ -93,7 +96,15 @@ public class BitmapActivity extends RendererActivity implements SensorEventListe
 		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
 		mSensorManager.registerListener(this, mCompass, SensorManager.SENSOR_DELAY_UI);
 		
-		loadTexture(new TextWidget());
+		widget = new ClockWidget();
+		loadTexture(widget);
+	}
+	
+	public void updateScene(){
+		if(widget.needsUpdate()){
+			Shared.textureManager().deleteTexture(widget.toString());
+			Shared.textureManager().addTextureId(widget.renderBitmap(), widget.toString());
+		}
 	}
 	
 	@Override

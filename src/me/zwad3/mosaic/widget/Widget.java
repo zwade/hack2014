@@ -1,12 +1,9 @@
-package me.zwad3.mosaic;
+package me.zwad3.mosaic.widget;
 
 import android.graphics.Bitmap;
 
-public interface Widget {
+public interface Widget{
 	public boolean needsUpdate();
 	
 	public Bitmap renderBitmap();
-	
-	public String toString();
-
 }
