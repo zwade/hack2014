@@ -1,6 +1,8 @@
 package me.zwad3.mosaic;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 
 import android.util.Log;
 import android.view.KeyEvent;
@@ -14,9 +16,17 @@ import min3d.vos.TextureVo;
 
 public class ExampleImplement extends Renderer3D {
 	private SkyBox mSkyBox;
-	private ArrayList<Box> objects;
+	private HashMap<Box, Widget> objects;
+	
+	private long lastUpdate;
+	private long TTL = 500;
+	
+	private final int DELAY = 500;
+	
+	
 	public void initScene() {
-		objects = new ArrayList<Box>();
+		lastUpdate = Calendar.getInstance().getTime().getTime();
+		objects = new HashMap<Box, Widget>();
 		super.initScene();
 		scene.lights().add(new Light());
 		
@@ -40,18 +50,35 @@ public class ExampleImplement extends Renderer3D {
 	            tmp.position().x = 2;
 	            tmp.position().y = 2;
 	            tmp.position().z = 2;
-	            loadTexture(new TextWidget(), tmp);
-	            objects.add(tmp);
+	            TextWidget txt = new TextWidget();
+	            loadTexture(txt, tmp);
+	            objects.put(tmp, txt);
 	            scene.addChild(tmp);
 	            
 	            return true;
 	        }
 	        return false;
 	}
+	@Override
+	public void updateScene() {
+		long time = Calendar.getInstance().getTime().getTime();
+		long dx = time-lastUpdate;
+		lastUpdate = time;
+		TTL -= dx;
+		if (TTL < 0) {
+			for (Box i:objects.keySet()) {
+				if (objects.get(i).needsUpdate()) {
+					loadTexture(objects.get(i),i);
+				}
+			}
+		}
+		
+	}
 	private boolean loadTexture(Widget w, Box b) {
 		if (!w.needsUpdate()) {
 			return false;
 		}
+		Shared.textureManager().deleteTextureId(w.renderBitmap(), w.toString(), false);
 		Shared.textureManager().addTextureId(w.renderBitmap(), w.toString(), false);
 			
 		TextureVo texture = new TextureVo(w.toString());
