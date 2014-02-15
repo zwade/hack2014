@@ -12,6 +12,7 @@ import min3d.parser.Parser;
 import min3d.vos.Light;
 import min3d.vos.Number3d;
 import min3d.vos.TextureVo;
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.hardware.Sensor;
@@ -39,9 +40,12 @@ public class BitmapActivity extends RendererActivity implements SensorEventListe
 	
 	private Widget widget;
 	
+	public static Activity context;
+	
 	@Override
 	
     public void onCreate(Bundle savedInstanceState) {
+		context = this;
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -96,13 +100,15 @@ public class BitmapActivity extends RendererActivity implements SensorEventListe
 		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
 		mSensorManager.registerListener(this, mCompass, SensorManager.SENSOR_DELAY_UI);
 		
-		widget = new ClockWidget();
+		widget = new RandomPictureWidget();
 		loadTexture(widget);
 	}
 	
 	public void updateScene(){
 		if(widget.needsUpdate()){
-			Shared.textureManager().deleteTexture(widget.toString());
+			if(Shared.textureManager().contains(widget.toString())){
+				Shared.textureManager().deleteTexture(widget.toString());
+			}
 			Shared.textureManager().addTextureId(widget.renderBitmap(), widget.toString());
 		}
 	}
