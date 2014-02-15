@@ -135,6 +135,7 @@ public class BitmapActivity extends RendererActivity implements SensorEventListe
 	    }
 	}
 	
+	
 	private int getDirection(float newD,float oldD) {
 		
 		

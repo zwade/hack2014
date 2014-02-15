@@ -17,6 +17,7 @@ public class TextWidget implements Widget {
 
 	@Override
 	public Bitmap renderBitmap() {
+		
 		 Paint paint = new Paint();
 		 paint.setTextSize(1);
 		 paint.setColor(Color.RED);
@@ -28,7 +29,7 @@ public class TextWidget implements Widget {
 		 Canvas canvas = new Canvas(image);
 		 canvas.drawRect(0, 0, 256, 256, paint);
 		 paint.setColor(Color.BLACK);
-		 //drawText("Hello Texture", 0, 0, paint);
+		 
 		
 		 return image;
 	}

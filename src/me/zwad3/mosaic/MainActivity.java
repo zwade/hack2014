@@ -1,4 +1,9 @@
 package me.zwad3.mosaic;
+//package com.google.android.glass.sample.compass;
+import java.util.List;
+
+
+import com.google.orientation.*;
 
 import min3d.Shared;
 import min3d.Utils;
@@ -13,15 +18,19 @@ import min3d.vos.Number3d;
 import min3d.vos.TextureVo;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
 
 public class MainActivity extends RendererActivity implements SensorEventListener {
+	protected static final float TOO_STEEP_PITCH_DEGREES = 70f;
+
 	private final float FILTERING_FACTOR = .3f;
 	
 	private SkyBox mSkyBox;
@@ -35,6 +44,15 @@ public class MainActivity extends RendererActivity implements SensorEventListene
 	private final float _alpha = 2; 
 	private final float _thresh = 10;
 	private Object3dContainer _cube;
+	private GeomagneticField mGeomagneticField;
+	private float[] mOrientation= new float[9];
+	private float mHeading;
+    private Location mLocation;
+    private boolean mHasInterference;
+    private float[] mRotationMatrix= new float[16];
+    private float mPitch;
+    
+	 private boolean mTooSteep;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +69,7 @@ public class MainActivity extends RendererActivity implements SensorEventListene
 		Log.d("exit", "boo");
 		System.exit(0);
 	}
-	
+    
 	public void initScene()
 	{
 		scene.lights().add(new Light());
@@ -67,61 +85,57 @@ public class MainActivity extends RendererActivity implements SensorEventListene
 		mSkyBox.scale().z = 2.0f;
 		scene.addChild(mSkyBox);
 		
-		Log.d("hi", "init");
 		
-		
-		
-		//IParser parser = Parser.createParser(Parser.Type.MAX_3DS,
-		//		getResources(), "min3d.sampleProject1:raw/monster_high", true);
-		//parser.parse();
 
-		//mMonster = parser.getParsedObject();
-		//mMonster.scale().x = mMonster.scale().y = mMonster.scale().z  = .1f;
-		//mMonster.position().y = -2.5f;
-		//mMonster.position().z = -3;
-		//scene.addChild(mMonster);
-			
-		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
-		mSensorManager.registerListener(this, mCompass, SensorManager.SENSOR_DELAY_UI);
+		mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR),
+                SensorManager.SENSOR_DELAY_UI);
+		mSensorManager.registerListener(this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_UI);
 	}
 	
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		// TODO Auto-generated method stub
+
 	}
 	 
 	float[] mGravity;
 	float[] mGeomagnetic;
+	
+    
+
+	
 	public void onSensorChanged(SensorEvent event) {
-		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
-			mGravity = event.values;
-	    if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
-	    	mGeomagnetic = event.values;
-	    if (mGravity != null && mGeomagnetic != null) {
-	    	float R[] = new float[9];
-	    	float I[] = new float[9];
-	    	boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
-	    	if (success) {
-	    		float orientation[] = new float[3];
-	    		SensorManager.getOrientation(R, orientation);
-	    		float newDir = orientation[0];
-	    		int dir = getDirection(newDir, _theta);
-	    		
-	    		//azimuth = orientation[0]; // orientation contains: azimuth, pitch and roll
-	    		scene.camera().target.z = (float) Math.sin(orientation[0]);//Math.sin(orientation[0]*180/Math.PI);
-	    		scene.camera().target.x = (float) Math.cos(orientation[0]);//Math.cos(orientation[0]*180/Math.PI);
-	    		
-	    		
-	    		scene.camera().position.z = 0f; 
-	    		scene.camera().position.y = 0; 
-	    		
-	    		_theta = orientation[0];
-	    		_omega = _omega + _theta*dir*_alpha;
-	    		
-	    		
-	    	}
-	    }
-	}
+        if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
+
+            SensorManager.getRotationMatrixFromVector(mRotationMatrix, event.values);
+            SensorManager.remapCoordinateSystem(mRotationMatrix, SensorManager.AXIS_X,
+                    SensorManager.AXIS_Z, mRotationMatrix);
+            SensorManager.getOrientation(mRotationMatrix, mOrientation);
+
+            mPitch = (float) Math.toDegrees(mOrientation[1]);
+
+            float magneticHeading = (float) Math.toDegrees(mOrientation[0]);
+            mHeading = MathUtils.mod(computeTrueNorth(magneticHeading), 360.0f)
+                    - 6;
+            scene.camera().target.z = (float) Math.sin(mHeading*Math.PI/180);
+    		scene.camera().target.x = (float) Math.cos(mHeading*Math.PI/180);
+    		
+    		
+    		scene.camera().position.z = 0f; 
+    		scene.camera().position.y = 0; 
+         
+        } else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+  
+			mAccVals.y = (float) (event.values[2] * FILTERING_FACTOR + mAccVals.y * (1.0 - FILTERING_FACTOR));
+			
+        	scene.camera().position.y = mAccVals.y * .3f;
+        	
+        	scene.camera().target.y = -scene.camera().position.y;
+        
+        }
+    }
 	
 	private int getDirection(float newD,float oldD) {
 		
@@ -129,27 +143,26 @@ public class MainActivity extends RendererActivity implements SensorEventListene
 		return 1;
 	}
 
-	/**
-	@Override
-	public void onSensorChanged(SensorEvent event) {
-		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-  
-		
-			// low-pass filter to make the movement more stable
-			//mAccVals.x = (float) (event.values[0] * FILTERING_FACTOR + mAccVals.x * (1.0 - FILTERING_FACTOR));
-			mAccVals.y = (float) (event.values[2] * FILTERING_FACTOR + mAccVals.y * (1.0 - FILTERING_FACTOR));
-			
-			//scene.camera().position.x = mAccVals.x * .2f;
-        	scene.camera().position.y = mAccVals.y * .3f;
-        	
-        	//scene.camera().target.x = -scene.camera().position.x;
-        	scene.camera().target.y = -scene.camera().position.y;
-        
-        	//Log.d("Accel Data", event.values[0]+" "+event.values[1]+" "+event.values[2]);
-		} else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-			float rot = event.values[2];
-			Log.d("Woah", ""+rot);
-		}
-	}
-	**/
+
+	private void updateGeomagneticField() {
+        mGeomagneticField = new GeomagneticField((float) mLocation.getLatitude(),
+                (float) mLocation.getLongitude(), (float) mLocation.getAltitude(),
+                mLocation.getTime());
+    }
+
+    /**
+     * Use the magnetic field to compute true (geographic) north from the specified heading
+     * relative to magnetic north.
+     *
+     * @param heading the heading (in degrees) relative to magnetic north
+     * @return the heading (in degrees) relative to true north
+     */
+    private float computeTrueNorth(float heading) {
+        if (mGeomagneticField != null) {
+            return heading + mGeomagneticField.getDeclination();
+        } else {
+            return heading;
+        }
+    }
+
 }
