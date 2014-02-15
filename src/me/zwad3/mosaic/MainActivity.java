@@ -66,8 +66,7 @@ public class MainActivity extends RendererActivity implements SensorEventListene
 	}
 	@Override
 	public void onPause() {
-		Log.d("exit", "boo");
-		System.exit(0);
+		super.onPause();
 	}
     
 	public void initScene()
