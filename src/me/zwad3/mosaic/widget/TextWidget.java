@@ -1,5 +1,6 @@
 package me.zwad3.mosaic.widget;
 
+import me.zwad3.mosaic.MosaicActivity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,7 +11,8 @@ public class TextWidget extends Widget {
 	
 	Bitmap image;
 	
-	public TextWidget(){
+	public TextWidget(MosaicActivity a){
+		super(a);
 		Paint paint = new Paint();
 		paint.setTextSize(1);
 		paint.setColor(Color.GREEN);

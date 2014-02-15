@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.orientation.*;
 
+import me.zwad3.mosaic.widget.VoiceListener;
 import min3d.Shared;
 import min3d.Utils;
 import min3d.core.Object3dContainer;
@@ -16,6 +17,7 @@ import min3d.parser.Parser;
 import min3d.vos.Light;
 import min3d.vos.Number3d;
 import min3d.vos.TextureVo;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.hardware.GeomagneticField;
@@ -25,10 +27,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.WindowManager;
 
-public class Renderer3D extends RendererActivity implements SensorEventListener {
+public class Renderer3D extends MosaicActivity implements SensorEventListener {
 	protected static final float TOO_STEEP_PITCH_DEGREES = 70f;
 
 	private final float FILTERING_FACTOR = .3f;
@@ -51,6 +54,8 @@ public class Renderer3D extends RendererActivity implements SensorEventListener 
     private boolean mHasInterference;
     private float[] mRotationMatrix= new float[16];
     private float mPitch;
+    
+    private VoiceListener _vl;
     
 	 private boolean mTooSteep;
 	
@@ -145,5 +150,31 @@ public class Renderer3D extends RendererActivity implements SensorEventListener 
             return heading;
         }
     }
+    @Override
+	public void getVoiceInput(VoiceListener v) {
+		displaySpeechRecognizer();
+		_vl = v;
+		
+	}
+	
+	private void displaySpeechRecognizer() {
+	    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+	    startActivityForResult(intent, 0);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode,
+	        Intent data) {
+	    if (requestCode == 0 && resultCode == RESULT_OK) {
+	        List<String> results = data.getStringArrayListExtra(
+	                RecognizerIntent.EXTRA_RESULTS);
+	        String spokenText = results.get(0);
+	        // Do something with spokenText.
+	        if (_vl != null) {
+	        	_vl.receiveSTT(spokenText);
+	        }
+	    }
+	    super.onActivityResult(requestCode, resultCode, data);
+	}
 
 }

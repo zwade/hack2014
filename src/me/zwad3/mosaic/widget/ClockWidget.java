@@ -8,7 +8,14 @@ import android.graphics.Paint;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import me.zwad3.mosaic.MosaicActivity;
+
 public class ClockWidget extends Widget {
+
+	public ClockWidget(MosaicActivity a) {
+		super(a);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public boolean needsUpdate() {

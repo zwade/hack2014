@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
 public abstract class Widget{
 	public MosaicActivity parent;
 	
-	public void Widget(MosaicActivity a) {
+	public Widget(MosaicActivity a) {
 		parent = a;
 	}
 	
