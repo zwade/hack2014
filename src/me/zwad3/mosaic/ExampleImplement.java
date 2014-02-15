@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.widget.PopupMenu;
 import me.zwad3.mosaic.widget.ClockWidget;
 import me.zwad3.mosaic.widget.TextWidget;
 import me.zwad3.mosaic.widget.Widget;
@@ -55,10 +59,13 @@ public class ExampleImplement extends Renderer3D {
 	@Override
 	public void updateScene() {
 		if (needsUpdate) {
-			
-			MenuInflater inflater = getMenuInflater();
-			
-			
+			runOnUiThread(new Runnable() {
+			    public void run() {
+			        //Toast.makeText(activity, "Hello", Toast.LENGTH_SHORT).show();
+			    	openOptionsMenu();
+			    }
+			});
+
 			Log.d("Tap", "Tap Revolution");
             Box tmp = new Box(1,1,0);
             tmp.position().x = scene.camera().target.x*5;
@@ -119,4 +126,28 @@ public class ExampleImplement extends Renderer3D {
 		
 		return true;
 	}
+	@Override
+	 public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.newitem, menu);
+	    return true;
+	 }
+
+	 @Override
+	 public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection.
+	    switch (item.getItemId()) {
+	        case R.id.clock:
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	 }
+
+	    @Override
+	 public void onOptionsMenuClosed(Menu menu) {
+	        // Nothing else to do, closing the Activity.
+	    finish();
+	 }
+	
 }
