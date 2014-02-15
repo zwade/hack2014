@@ -87,7 +87,7 @@ public class ExampleImplement extends Renderer3D {
 	        	
 	        	target = null;
 	        	for (Box b:objects.keySet()) {
-	        		if (getDistance(b) < Math.sqrt(26)) {
+	        		if (getDistance(b)) {
 	        			Log.d("Clicked Entity", b.toString());
 	        			target = b;
 	        		}
@@ -238,7 +238,7 @@ public class ExampleImplement extends Renderer3D {
 	    }
 	 }
 	 
-	 public float getDistance(Box b) {
+	 public boolean getDistance(Box b) {
 		 float n[] = new float[3];
 		 float p[] = new float[3];
 		 float c[] = new float[3];
@@ -264,8 +264,7 @@ public class ExampleImplement extends Renderer3D {
 		 
 		 float dist = -(n[0]*(p[0]-c[0])+n[1]*(p[1]-c[1])+n[2]*(p[2]-c[2]))/(t[0]*n[0]+t[1]*n[1]+t[2]*n[2]);
 		 
-		 Log.d("bounds", ""+dist);//(p[0]+dist*t[0])+" "+(p[1]+dist*t[1])+" "+(p[2]+dist*t[2]));		 
-		 return dist;
+		 return ((p[0]+dist*t[0]-c[0])< 1 && (p[1]+dist*t[1]-c[1]) < 1 && (p[2]+dist*t[2]-c[2]) < 1);
 		 
 	 }
 
