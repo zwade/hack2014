@@ -71,10 +71,11 @@ public class ExampleImplement extends Renderer3D {
 	}
 	@Override
 	public void updateScene() {
+		Log.d("Camera",""+scene.camera().target.x+" "+scene.camera().target.y+" "+scene.camera().target.z);
 		if (needsUpdate != null) {
 		
-
-			Log.d("Tap", "Tap Revolution");
+			
+			
             Box tmp = new Box(2,2,0);
             tmp.position().x = latestCoords[0]*5;
             tmp.position().y = latestCoords[1]*5;
@@ -83,6 +84,9 @@ public class ExampleImplement extends Renderer3D {
             float x = latestCoords[0]-latestCoords[3];
             float y = latestCoords[1]-latestCoords[4];
             float z = latestCoords[2]-latestCoords[5];
+            
+            float normal[] = {x,y,z};
+            tmp.setNormal(normal);
             //Log.d("BOB",""+scene.camera().position.y);
             
             //float den = (float) Math.sqrt(x*x+y*y+z*z);
@@ -93,7 +97,7 @@ public class ExampleImplement extends Renderer3D {
             //tmp.rotation().x = (float) ((float) Math.sin(Math.acos(z/den)*Math.PI/180)*Math.sin(Math.acos(y/den)*Math.PI/180))*360;
             //tmp.rotation().y = (float) ((float) Math.sin(Math.acos(z/den)*Math.PI/180)*Math.cos(Math.acos(x/den)*Math.PI/180))*360;
         
-            Log.d("target and rotation",""+x+" "+y+" "+z+" "+tmp.rotation().x+" "+tmp.rotation().y+" "+tmp.rotation().z);
+            //("target and rotation",""+x+" "+y+" "+z+" "+tmp.rotation().x+" "+tmp.rotation().y+" "+tmp.rotation().z);
             
             //TextWidget txt = new TextWidget();
             loadTexture(needsUpdate, tmp);
@@ -171,9 +175,9 @@ public class ExampleImplement extends Renderer3D {
 		 c[1] = b.position().y;
 		 c[2] = b.position().z;
 		 
-		 n[0] = -b.rotation().x;
-		 n[1] = -b.rotation().y;
-		 n[2] = -b.rotation().z;
+		 n[0] = -b.getNormal()[0];
+		 n[1] = -b.getNormal()[1];
+		 n[2] = -b.getNormal()[2];
 		 
 		 float normd = (float) Math.sqrt(scene.camera().target.x*scene.camera().target.x+scene.camera().target.y*scene.camera().target.y+scene.camera().target.z*scene.camera().target.z);
 		 
@@ -183,7 +187,6 @@ public class ExampleImplement extends Renderer3D {
 		 
 		 float dist = -(n[0]*(p[0]-c[0])+n[1]*(p[1]-c[1])+n[2]*(p[2]-c[2]))/(t[0]*n[0]+t[1]*n[1]+t[2]*n[2]);
 		 
-		 Log.d("Distance", ""+dist);
 		 
 		 return dist;
 		 
