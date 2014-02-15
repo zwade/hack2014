@@ -1,10 +1,17 @@
 package me.zwad3.mosaic.widget;
 
+import me.zwad3.mosaic.MosaicActivity;
+import android.app.Activity;
 import android.graphics.Bitmap;
 
-public interface Widget{
+public abstract class Widget{
+	public MosaicActivity parent;
 	
-	public boolean needsUpdate();
+	public void Widget(MosaicActivity a) {
+		parent = a;
+	}
 	
-	public Bitmap renderBitmap();
+	public abstract boolean needsUpdate();
+		
+	public abstract Bitmap renderBitmap();
 }

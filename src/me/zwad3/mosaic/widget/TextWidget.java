@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.widget.Button;
 
-public class TextWidget implements Widget {
+public class TextWidget extends Widget {
 	
 	Bitmap image;
 	

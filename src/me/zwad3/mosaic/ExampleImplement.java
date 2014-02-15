@@ -24,7 +24,7 @@ import min3d.objectPrimitives.SkyBox;
 import min3d.vos.Light;
 import min3d.vos.TextureVo;
 
-public class ExampleImplement extends Renderer3D {
+public class ExampleImplement extends MosaicActivity {
 	private SkyBox mSkyBox;
 	private HashMap<Box, Widget> objects;
 	
@@ -197,5 +197,10 @@ public class ExampleImplement extends Renderer3D {
 	        // Nothing else to do, closing the Activity.
 	    //finish();
 	 }
+		@Override
+		public String getVoiceInput() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	
 }

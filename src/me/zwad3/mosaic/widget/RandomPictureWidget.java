@@ -10,7 +10,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.ImageColumns;
 
-public class RandomPictureWidget implements Widget {
+public class RandomPictureWidget extends Widget {
 	
 	private int updateCallCount;
 	
