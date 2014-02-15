@@ -3,10 +3,12 @@ package me.zwad3.mosaic;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -16,6 +18,7 @@ import android.view.MotionEvent;
 import android.widget.PopupMenu;
 import me.zwad3.mosaic.widget.ClockWidget;
 import me.zwad3.mosaic.widget.TextWidget;
+import me.zwad3.mosaic.widget.VoiceListener;
 import me.zwad3.mosaic.widget.Widget;
 import min3d.Shared;
 import min3d.core.Object3dContainer;
@@ -24,7 +27,7 @@ import min3d.objectPrimitives.SkyBox;
 import min3d.vos.Light;
 import min3d.vos.TextureVo;
 
-public class ExampleImplement extends MosaicActivity {
+public class ExampleImplement extends Renderer3D {
 	private SkyBox mSkyBox;
 	private HashMap<Box, Widget> objects;
 	
@@ -36,6 +39,8 @@ public class ExampleImplement extends MosaicActivity {
 	private Widget needsUpdate;
 	
 	private float latestCoords[] = new float[6];
+	
+	private VoiceListener _vl;
 	
 	
 	public void initScene() {
@@ -151,10 +156,10 @@ public class ExampleImplement extends MosaicActivity {
 	    switch (item.getItemId()) {
 	        case R.id.clock:
 	        	Log.d("hi", "clock");
-	        	needsUpdate = new ClockWidget();
+	        	needsUpdate = new ClockWidget(this);
 	            return false;
 	        case R.id.blank:
-	        	needsUpdate = new TextWidget();
+	        	needsUpdate = new TextWidget(null);
 	        	return false;
 	        default:
 	            return super.onOptionsItemSelected(item);
@@ -197,10 +202,6 @@ public class ExampleImplement extends MosaicActivity {
 	        // Nothing else to do, closing the Activity.
 	    //finish();
 	 }
-		@Override
-		public String getVoiceInput() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+	
 	
 }

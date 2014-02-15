@@ -23,7 +23,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
 
-public class BitmapActivity extends RendererActivity implements SensorEventListener {
+public class BitmapActivity extends Renderer3D implements SensorEventListener {
 	private final float FILTERING_FACTOR = .3f;
 	
 	private SkyBox mSkyBox;
@@ -100,22 +100,16 @@ public class BitmapActivity extends RendererActivity implements SensorEventListe
 		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
 		mSensorManager.registerListener(this, mCompass, SensorManager.SENSOR_DELAY_UI);
 		
-		widget = new BreakingNewsWidget();
+		widget = new RandomPictureWidget(this);
 		loadTexture(widget);
 	}
 	
 	public void updateScene(){
 		if(widget.needsUpdate()){
-			Log.d("!", "Updating");
 			if(Shared.textureManager().contains(widget.toString())){
 				Shared.textureManager().deleteTexture(widget.toString());
-			} else {
-				Log.d("WAT", "WAT");
 			}
 			Shared.textureManager().addTextureId(widget.renderBitmap(), widget.toString());
-			Log.d(".", "done");
-		} else {
-			//Log.d("!", "no update needed...");
 		}
 	}
 	

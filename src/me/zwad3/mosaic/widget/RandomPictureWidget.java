@@ -3,6 +3,7 @@ package me.zwad3.mosaic.widget;
 import java.io.File;
 
 import me.zwad3.mosaic.BitmapActivity;
+import me.zwad3.mosaic.MosaicActivity;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -21,7 +22,8 @@ public class RandomPictureWidget extends Widget {
 	
 	Bitmap image;
 	
-	public RandomPictureWidget(){
+	public RandomPictureWidget(MosaicActivity a){
+		super(a);
 		updateCallCount = 0;
 	}
 	
