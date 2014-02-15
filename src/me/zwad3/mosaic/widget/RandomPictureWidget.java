@@ -11,6 +11,8 @@ public class RandomPictureWidget implements Widget {
 	
 	private int updateCallCount;
 	
+	Bitmap image;
+	
 	public RandomPictureWidget(){
 		updateCallCount = 0;
 	}
@@ -23,16 +25,10 @@ public class RandomPictureWidget implements Widget {
 
 	@Override
 	public Bitmap renderBitmap() {
-		String[] columns = new String[]{
-				ImageColumns._ID,
-				ImageColumns.TITLE,
-				ImageColumns.DATA,
-				ImageColumns.MIME_TYPE,
-				ImageColumns.SIZE
-		};
-		ContentResolver cr = BitmapActivity.context.getContentResolver();
-		Cursor cur = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, null);
-		
+		File dir = new File(Environment.getExternalStorageDirectory()+"/DCIM/Camera");
+		int ind = (math.random()*dir.getFiles().length)
+		image = BitmapFactory.decodeFile(dir.getFiles()[ind].toString())
+		Canvas canvas = new Canvas(image);
 		return null;
 	}
 
