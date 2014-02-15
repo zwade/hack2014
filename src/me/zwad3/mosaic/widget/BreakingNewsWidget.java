@@ -33,67 +33,60 @@ public class BreakingNewsWidget extends Widget {
 	
 	public BreakingNewsWidget(){
 		t = 0;
+		headlines = new String[0];
 	}
 	
 	@Override
 	public boolean needsUpdate() {
 		t++;
-		if(t % 240 != 0){
-			return false;
-		}
-		HttpGet uri = new HttpGet("http://api.usatoday.com/open/breaking?expired=true&api_key=qgvnw4xg73mmsr6m9vuks5ke");
-		DefaultHttpClient client = new DefaultHttpClient();
-		HttpResponse resp;
-		try{
-			resp = client.execute(uri);
-		} catch(Exception e){
-			Log.d("ERROR", e.getMessage());
-			return false;
-		}
-		StatusLine status = resp.getStatusLine();
-		if(status.getStatusCode() != 200){
-			Log.d("ERROR", "HTTP error, invalid server status code.");
-			return false;
-		}
-		try{
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(resp.getEntity().getContent());
-			NodeList hls = doc.getElementsByTagName("title");
-			headlines = new String[hls.getLength()-2];
-			for(int i = 2; i < hls.getLength(); i++){
-				headlines[i-2] = hls.item(i).getTextContent();
+		if(t % 240 == 0){
+			HttpGet uri = new HttpGet("http://api.usatoday.com/open/breaking?expired=true&api_key=qgvnw4xg73mmsr6m9vuks5ke");
+			DefaultHttpClient client = new DefaultHttpClient();
+			HttpResponse resp = null;
+			try{
+				resp = client.execute(uri);
+			} catch(Exception e){
+				Log.d("ERROR", e.getMessage());
 			}
-			Log.d("YAY", "success... " + Arrays.toString(headlines));
-			return true;
-		} catch(Exception e){
-			Log.d("ERROR", e.getMessage());
+			StatusLine status = resp.getStatusLine();
+			if(status.getStatusCode() != 200){
+				Log.d("ERROR", "HTTP error, invalid server status code.");
+			}
+			try{
+				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder builder = factory.newDocumentBuilder();
+				Document doc = builder.parse(resp.getEntity().getContent());
+				NodeList hls = doc.getElementsByTagName("title");
+				headlines = new String[hls.getLength()-2];
+				for(int i = 2; i < hls.getLength(); i++){
+					headlines[i-2] = hls.item(i).getTextContent();
+				}
+				if(headlines.length == 0){
+					headlines = new String[]{"No Breaking News"};
+					Log.d("Nonews", "No breaking news.");
+				}
+				Log.d("YAY", "success... " + Arrays.toString(headlines));
+			} catch(Exception e){
+				Log.d("ERROR", e.getMessage());
+			}
 		}
-		return false;
+		return true;
 	}
 	
 	@Override
 	public Bitmap renderBitmap() {
-		/*Log.d("...", "rendering...");
+		Log.d("...", "rendering...");
 		Paint paint = new Paint();
-		paint.setColor(Color.RED);
+		paint.setColor(0xFFDDEEFF);
 		paint.setTextAlign(Paint.Align.LEFT);
-		Bitmap image = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
+		Bitmap image = Bitmap.createBitmap(1024, 512, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(image);
-		canvas.drawRect(0, 0, 256, 256, paint);
-		paint.setColor(Color.BLACK);
-		paint.setTextSize(48);
+		canvas.drawRect(0, 0, 1024, 512, paint);
+		paint.setColor(0xFF224488);
+		paint.setTextSize(32);
 		for(int i = 0; i < headlines.length; i++){
-			canvas.drawText(headlines[i], 10, 24*i, paint);
+			canvas.drawText(headlines[i], 10, 32*(i+1), paint);
 		}
-		return image;*/
-		
-		Paint paint = new Paint();
-		paint.setColor(Color.RED);
-		paint.setTextAlign(Paint.Align.LEFT);
-		Bitmap image = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(image);
-		canvas.drawRect(0, 0, 256, 256, paint);
 		return image;
 	}
 
