@@ -1,9 +1,14 @@
 package me.zwad3.mosaic.widget;
 
+import java.io.InputStream;
+
 import me.zwad3.mosaic.MosaicActivity;
+import me.zwad3.mosaic.MyApplication;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -37,17 +42,27 @@ public class StickyNoteWidget extends Widget implements VoiceListener{
 
 	@Override
 	public Bitmap renderBitmap() {
-		// TODO Auto-generated method stub
+		AssetManager assetManager = MyApplication.getAppContext().getAssets();
+		Bitmap bmp = null;
+		try{
+			Log.d("assetmanager", "" + (assetManager == null));
+			InputStream inp = assetManager.open("widgets/sticky-note-widget.bmp");
+			Log.d("texture", "" + (inp == null));
+			bmp = Bitmap.createBitmap(BitmapFactory.decodeStream(inp, null, null));
+		} catch(Exception e){
+			Log.d("no", "nop");
+		}
 		Paint paint = new Paint();
 		paint.setTextSize(2);
 		paint.setColor(Color.YELLOW);
-		paint.setTypeface(Typeface.create("Comic Sans",0));
+		paint.setTypeface(Typeface.create("Handwritten",0));
 		paint.setTextAlign(Paint.Align.LEFT);
-		Bitmap image = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
+		Bitmap image = bmp.copy(Bitmap.Config.ARGB_8888, true);
 		Canvas canvas = new Canvas(image);
-		canvas.drawRect(0, 0, 256, 256, paint);
+		canvas.drawRect(0, 0, 512, 512, paint);
 		paint.setColor(Color.BLACK);
 		paint.setTextSize(40);
+		canvas.translate(10, 10);
 		if (myText != null) {
 			canvas.drawText(myText, 16, 32, paint);
 		} else {
