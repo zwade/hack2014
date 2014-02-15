@@ -18,7 +18,6 @@ public class ClockWidget implements Widget {
 	@Override
 	public Bitmap renderBitmap() {
 		Paint paint = new Paint();
-		paint.setTextSize(1);
 		paint.setColor(Color.BLUE);
 		paint.setTextAlign(Paint.Align.LEFT);
 		Bitmap image = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);

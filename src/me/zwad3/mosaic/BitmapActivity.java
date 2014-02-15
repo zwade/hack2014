@@ -100,16 +100,22 @@ public class BitmapActivity extends RendererActivity implements SensorEventListe
 		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
 		mSensorManager.registerListener(this, mCompass, SensorManager.SENSOR_DELAY_UI);
 		
-		widget = new RandomPictureWidget();
+		widget = new BreakingNewsWidget();
 		loadTexture(widget);
 	}
 	
 	public void updateScene(){
 		if(widget.needsUpdate()){
+			Log.d("!", "Updating");
 			if(Shared.textureManager().contains(widget.toString())){
 				Shared.textureManager().deleteTexture(widget.toString());
+			} else {
+				Log.d("WAT", "WAT");
 			}
 			Shared.textureManager().addTextureId(widget.renderBitmap(), widget.toString());
+			Log.d(".", "done");
+		} else {
+			//Log.d("!", "no update needed...");
 		}
 	}
 	
