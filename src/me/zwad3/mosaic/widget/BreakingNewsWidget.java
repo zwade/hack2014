@@ -31,6 +31,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -114,22 +115,24 @@ public class BreakingNewsWidget extends Widget {
 		}
 		Paint paint = new Paint();
 		paint.setTextAlign(Paint.Align.LEFT);
+		paint.setTypeface(Typeface.create("Roboto",Typeface.BOLD));
 		Bitmap bitmap = bmp.copy(Bitmap.Config.ARGB_8888, true);
 		Canvas canvas = new Canvas(bitmap);
 		paint.setColor(0xFF08418C);
-		paint.setTextSize(48);
+		paint.setTextSize(36);
 		String str = "";
 		
 		for(int i = 0; i < Math.min(3, headlines.length); i++){
-			str += headlines[i] + "\n";
+			str += "\u00BB" + headlines[i] + "\n\n";
 		}
 		TextPaint textp = new TextPaint(paint);
 		textp.baselineShift = 100;
-		StaticLayout sl = new StaticLayout(str, textp, 504, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+		StaticLayout sl = new StaticLayout(str, textp, 496, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
 		Log.d("lines", "" + sl.getLineCount());
 		/*for(int i = 0; i < headlines.length; i++){
 			canvas.drawText(headlines[i], 10, 132 + 48*(i+1), paint);
 		}*/
+		canvas.translate(8, 132);
 		sl.draw(canvas);
 		return bitmap;
 	}
