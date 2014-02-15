@@ -2,6 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/blank" android:icon="@drawable/barong" android:title="@string/staticp"></item>
     <item android:id="@+id/clock" android:icon="@drawable/barong" android:title="@string/clock"></item>
+    <item android:id="@+id/sticky" android:title="@string/sticky" android:icon="@drawable/barong"></item>
     
 
 </menu>

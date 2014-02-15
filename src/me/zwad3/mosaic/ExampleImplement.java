@@ -8,6 +8,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.PopupMenu;
 import me.zwad3.mosaic.widget.ClockWidget;
+import me.zwad3.mosaic.widget.StickyNoteWidget;
 import me.zwad3.mosaic.widget.TextWidget;
 import me.zwad3.mosaic.widget.VoiceListener;
 import me.zwad3.mosaic.widget.Widget;
@@ -41,13 +43,33 @@ public class ExampleImplement extends Renderer3D {
 	private float latestCoords[] = new float[6];
 	
 	private VoiceListener _vl;
+	private int level = 0;
 	
-	
+	@Override
+	public void onCreate(Bundle sbi) {
+		if (level <= 1) {
+			level++;
+		}
+		super.onCreate(sbi);
+	}
+
 	public void initScene() {
-		lastUpdate = Calendar.getInstance().getTime().getTime();
-		objects = new HashMap<Box, Widget>();
+		Log.d("Level",""+level);
 		super.initScene();
 		scene.lights().add(new Light());
+		if (objects == null) {
+			Log.d("Object",  "are null");
+			lastUpdate = Calendar.getInstance().getTime().getTime();
+			objects = new HashMap<Box, Widget>();
+		} else {
+			for (Box i:objects.keySet()) {
+				initTexture(objects.get(i),i);
+				scene.addChild(i);
+				
+			}
+			Log.d("Num",""+objects.size());
+		}
+
 		
 		
 	}
@@ -76,9 +98,9 @@ public class ExampleImplement extends Renderer3D {
 	}
 	@Override
 	public void updateScene() {
-		Log.d("Camera",""+scene.camera().target.x+" "+scene.camera().target.y+" "+scene.camera().target.z);
+		//Log.d("Camera",""+scene.camera().target.x+" "+scene.camera().target.y+" "+scene.camera().target.z);
 		if (needsUpdate != null) {
-		
+			Log.d("Objects@Needs",""+objects.size());
 			
 			
             Box tmp = new Box(2,2,0);
@@ -105,7 +127,7 @@ public class ExampleImplement extends Renderer3D {
             //("target and rotation",""+x+" "+y+" "+z+" "+tmp.rotation().x+" "+tmp.rotation().y+" "+tmp.rotation().z);
             
             //TextWidget txt = new TextWidget();
-            loadTexture(needsUpdate, tmp);
+            initTexture(needsUpdate, tmp);
             objects.put(tmp, needsUpdate);
             scene.addChild(tmp);
             
@@ -143,6 +165,21 @@ public class ExampleImplement extends Renderer3D {
 		
 		return true;
 	}
+	private boolean initTexture(Widget w, Box b) {
+		//Shared.textureManager().deleteTextureId(w.renderBitmap(), w.toString(), false);
+		try {
+			Shared.textureManager().deleteTexture(w.toString());
+		} catch (Exception e) {
+			
+		}
+		Shared.textureManager().addTextureId(w.renderBitmap(), w.toString(), false);
+			
+		TextureVo texture = new TextureVo(w.toString());
+
+		b.textures().add(texture);
+		
+		return true;
+	}
 	@Override
 	 public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
@@ -153,13 +190,17 @@ public class ExampleImplement extends Renderer3D {
 	 @Override
 	 public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle item selection.
+		 Log.d("Objects",""+objects.size());
 	    switch (item.getItemId()) {
 	        case R.id.clock:
-	        	Log.d("hi", "clock");
+	        	//.d("hi", "clock");
 	        	needsUpdate = new ClockWidget(this);
 	            return false;
 	        case R.id.blank:
 	        	needsUpdate = new TextWidget(null);
+	        	return false;
+	        case R.id.sticky:
+	        	needsUpdate = new StickyNoteWidget(this);
 	        	return false;
 	        default:
 	            return super.onOptionsItemSelected(item);
@@ -197,11 +238,6 @@ public class ExampleImplement extends Renderer3D {
 		 
 	 }
 
-	    @Override
-	 public void onOptionsMenuClosed(Menu menu) {
-	        // Nothing else to do, closing the Activity.
-	    //finish();
-	 }
 	
 	
 }

@@ -45,6 +45,7 @@ public class BitmapActivity extends Renderer3D implements SensorEventListener {
 	@Override
 	
     public void onCreate(Bundle savedInstanceState) {
+		Log.d("At Least", "it didn't hit this");
 		context = this;
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);

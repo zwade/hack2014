@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 
@@ -38,16 +39,17 @@ public class StickyNoteWidget extends Widget implements VoiceListener{
 	public Bitmap renderBitmap() {
 		// TODO Auto-generated method stub
 		Paint paint = new Paint();
-		paint.setTextSize(1);
-		paint.setColor(Color.GREEN);
+		paint.setTextSize(2);
+		paint.setColor(Color.YELLOW);
+		paint.setTypeface(Typeface.create("Comic Sans",0));
 		paint.setTextAlign(Paint.Align.LEFT);
 		Bitmap image = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(image);
 		canvas.drawRect(0, 0, 256, 256, paint);
-		paint.setColor(Color.RED);
-		paint.setTextSize(24);
+		paint.setColor(Color.BLACK);
+		paint.setTextSize(40);
 		if (myText != null) {
-			canvas.drawText(myText, 10, 32, paint);
+			canvas.drawText(myText, 16, 32, paint);
 		} else {
 			canvas.drawText("Loading", 10, 32, paint);
 		}
@@ -62,5 +64,7 @@ public class StickyNoteWidget extends Widget implements VoiceListener{
 		Log.d("text",s);
 		
 	}
-
 }
+
+
+	
