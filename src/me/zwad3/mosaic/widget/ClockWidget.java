@@ -28,16 +28,13 @@ public class ClockWidget extends Widget {
 	@Override
 	public Bitmap renderBitmap() {
 		Paint paint = new Paint();
-		paint.setColor(Color.BLUE);
-		paint.setTextAlign(Paint.Align.LEFT);
 		Bitmap image = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(image);
-		canvas.drawRect(0, 0, 512, 512, paint);
-		paint.setColor(Color.YELLOW);
-		paint.setTextSize(64);
+		paint.setColor(0xFFFF0000);
+		paint.setTextSize(100);
 		paint.setTypeface(Typeface.create("Roboto",0));
 		paint.setTextAlign(Align.RIGHT);
-		canvas.drawText(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()), 376, 294, paint);
+		canvas.drawText(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()), 440, 287, paint);
 		return image;
 	}
 }
