@@ -3,6 +3,7 @@ package me.zwad3.mosaic;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Set;
 
 import android.util.Log;
 import android.view.KeyEvent;
@@ -32,34 +33,24 @@ public class ExampleImplement extends Renderer3D {
 		super.initScene();
 		scene.lights().add(new Light());
 		
-		mSkyBox = new SkyBox(5.0f, 2);
-		mSkyBox.addTexture(SkyBox.Face.North, 	R.drawable.wood_back, 	"north");
-		mSkyBox.addTexture(SkyBox.Face.East, 	R.drawable.wood_right, 	"east");
-		mSkyBox.addTexture(SkyBox.Face.South, 	R.drawable.wood_back, 	"south");
-		mSkyBox.addTexture(SkyBox.Face.West, 	R.drawable.wood_left, 	"west");
-		mSkyBox.addTexture(SkyBox.Face.Up,		R.drawable.ceiling, 	"up");
-		mSkyBox.addTexture(SkyBox.Face.Down, 	R.drawable.floor, 		"down");
-		mSkyBox.scale().y = 0.8f;
-		mSkyBox.scale().z = 2.0f;
-		//scene.addChild(mSkyBox);
 		
 	}
 	public boolean onKeyDown(int keycode, KeyEvent event) {
 	        if (keycode == KeyEvent.KEYCODE_DPAD_CENTER) {
 	            Log.d("Tap", "Tap Revolution");
 	            Box tmp = new Box(1,1,1);
-	            Log.d("hi", ""+tmp);
-	            tmp.position().x = -2;
-	            tmp.position().y = 0;
-	            tmp.position().z = -2;
+	            tmp.position().x = scene.camera().target.x*5;
+	            tmp.position().y = scene.camera().target.y*5;
+	            tmp.position().z = scene.camera().target.z*5;
 	            ClockWidget txt = new ClockWidget();
 	            loadTexture(txt, tmp);
 	            objects.put(tmp, txt);
 	            scene.addChild(tmp);
 	            
 	            return true;
+	 
 	        }
-	        return false;
+	        return super.onKeyDown(keycode, event);
 	}
 	@Override
 	public void updateScene() {
@@ -68,7 +59,9 @@ public class ExampleImplement extends Renderer3D {
 		lastUpdate = time;
 		TTL -= dx;
 		if (TTL < 0) {
-			for (Box i:objects.keySet()) {
+
+			Set<Box> obj = objects.keySet();
+			for (Box i:obj) {
 				if (objects.get(i).needsUpdate()) {
 					loadTexture(objects.get(i),i);
 				}

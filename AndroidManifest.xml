@@ -30,13 +30,13 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-                 <intent-filter>
-        			<action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
-    			</intent-filter>
-    			<meta-data
-        			android:name="com.google.android.glass.VoiceTrigger"
-        			android:resource="@xml/my_voice_trigger" />
-            	</intent-filter>
+            </intent-filter>
+            <intent-filter>
+        		<action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
+    		</intent-filter>
+    		<meta-data
+        		android:name="com.google.android.glass.VoiceTrigger"
+        		android:resource="@xml/my_voice_trigger" />
         </activity>
         <activity android:name="ExampleImplement"></activity>
     </application>

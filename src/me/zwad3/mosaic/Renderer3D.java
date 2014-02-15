@@ -64,10 +64,7 @@ public class Renderer3D extends RendererActivity implements SensorEventListener 
         mAccVals = new Number3d();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
-	@Override
-	public void onPause() {
-		super.onPause();
-	}
+
     
 	public void initScene()
 	{
