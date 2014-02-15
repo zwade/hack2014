@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
+import android.graphics.Typeface;
+import android.text.TextPaint;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,14 +28,13 @@ public class ClockWidget extends Widget {
 	@Override
 	public Bitmap renderBitmap() {
 		Paint paint = new Paint();
-		paint.setColor(Color.BLUE);
-		paint.setTextAlign(Paint.Align.LEFT);
-		Bitmap image = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888);
+		Bitmap image = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(image);
-		canvas.drawRect(0, 0, 256, 256, paint);
-		paint.setColor(Color.YELLOW);
-		paint.setTextSize(48);
-		canvas.drawText(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()), 10, 50, paint);
+		paint.setColor(0xFFFF0000);
+		paint.setTextSize(100);
+		paint.setTypeface(Typeface.create("Roboto",0));
+		paint.setTextAlign(Align.RIGHT);
+		canvas.drawText(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()), 440, 287, paint);
 		return image;
 	}
 }
