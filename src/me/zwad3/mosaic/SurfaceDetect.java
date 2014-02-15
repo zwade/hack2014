@@ -7,11 +7,21 @@ import android.graphics.Bitmap;
 import android.graphics.Camera;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 
 
 public class SurfaceDetect
 {
 	//TODO
+	public void LineList()
+	{
+		int i =0;
+		for(HoughLine l :getLine(EdgePhoto()))
+		{
+			Log.d("Line "+i,l.toString());
+			i++;
+		}
+	}
 	public Bitmap EdgePhoto()
 	{
 		return getEdge(getPic());
@@ -35,9 +45,10 @@ public class SurfaceDetect
 		 Bitmap edges = detector.getEdgesImage();
 		 return edges;
 	}
-	private double[] getLine(Bitmap b)
+	private Vector<HoughLine> getLine(Bitmap b)
 	{
-		return null;
+		HoughTransform h= new HoughTransform(b.getWidth(),b.getHeight());
+		return h.LineDetect(b);
 	}
 	private double[] getSurface(double[] d)
 	{
