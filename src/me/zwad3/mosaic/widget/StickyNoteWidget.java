@@ -14,6 +14,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.speech.RecognizerIntent;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.Log;
 
 public class StickyNoteWidget extends Widget implements VoiceListener{
@@ -53,23 +56,23 @@ public class StickyNoteWidget extends Widget implements VoiceListener{
 			Log.d("no", "nop");
 		}
 		Paint paint = new Paint();
-		paint.setTextSize(2);
-		paint.setColor(Color.YELLOW);
-		paint.setTypeface(Typeface.create("Handwritten",0));
 		paint.setTextAlign(Paint.Align.LEFT);
-		Bitmap image = bmp.copy(Bitmap.Config.ARGB_8888, true);
-		Canvas canvas = new Canvas(image);
-		canvas.drawRect(0, 0, 512, 512, paint);
-		paint.setColor(Color.BLACK);
-		paint.setTextSize(40);
-		canvas.translate(10, 10);
-		if (myText != null) {
-			canvas.drawText(myText, 16, 32, paint);
-		} else {
-			canvas.drawText("Loading", 10, 32, paint);
-		}
-		return image;
-
+		paint.setTypeface(Typeface.create("Droid Sans",Typeface.BOLD));
+		Bitmap bitmap = bmp.copy(Bitmap.Config.ARGB_8888, true);
+		Canvas canvas = new Canvas(bitmap);
+		paint.setColor(0xEE001122);
+		paint.setTextSize(36);
+		TextPaint textp = new TextPaint(paint);
+		textp.baselineShift = 100;
+		String text = myText==null? "Loading" : myText;
+		StaticLayout sl = new StaticLayout(text, textp, 496, Layout.Alignment.ALIGN_NORMAL, 1.2f, 0.0f, false);
+		Log.d("lines", "" + sl.getLineCount());
+		/*for(int i = 0; i < headlines.length; i++){
+			canvas.drawText(headlines[i], 10, 132 + 48*(i+1), paint);
+		}*/
+		canvas.translate(8, 24);
+		sl.draw(canvas);
+		return bitmap;
 	}
 
 	@Override
