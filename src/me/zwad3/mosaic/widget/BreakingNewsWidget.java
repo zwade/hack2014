@@ -1,6 +1,8 @@
 package me.zwad3.mosaic.widget;
 
 import java.io.IOException;
+
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -8,6 +10,7 @@ import java.util.Calendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import me.zwad3.mosaic.BitmapActivity;
 import me.zwad3.mosaic.MosaicActivity;
 
 import org.apache.http.HttpResponse;
@@ -21,10 +24,15 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlPullParser;
 
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.Log;
 import android.util.Xml;
 
@@ -42,7 +50,7 @@ public class BreakingNewsWidget extends Widget {
 	@Override
 	public boolean needsUpdate() {
 		t++;
-		if(t % 240 == 0){
+		if(t % 240 == 1){
 			HttpGet uri = new HttpGet("http://api.usatoday.com/open/breaking?expired=true&api_key=qgvnw4xg73mmsr6m9vuks5ke");
 			DefaultHttpClient client = new DefaultHttpClient();
 			HttpResponse resp = null;
@@ -50,10 +58,14 @@ public class BreakingNewsWidget extends Widget {
 				resp = client.execute(uri);
 			} catch(Exception e){
 				Log.d("ERROR", e.getMessage());
+				headlines = new String[]{"Can't connect to network."};
+				return true;
 			}
 			StatusLine status = resp.getStatusLine();
 			if(status.getStatusCode() != 200){
 				Log.d("ERROR", "HTTP error, invalid server status code.");
+				headlines = new String[]{"Can't connect to network."};
+				return true;
 			}
 			try{
 				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -71,6 +83,8 @@ public class BreakingNewsWidget extends Widget {
 				Log.d("YAY", "success... " + Arrays.toString(headlines));
 			} catch(Exception e){
 				Log.d("ERROR", e.getMessage());
+				headlines = new String[]{"Can't connect to network."};
+				return true;
 			}
 		}
 		return true;
@@ -79,18 +93,32 @@ public class BreakingNewsWidget extends Widget {
 	@Override
 	public Bitmap renderBitmap() {
 		Log.d("...", "rendering...");
-		Paint paint = new Paint();
-		paint.setColor(0xFFDDEEFF);
-		paint.setTextAlign(Paint.Align.LEFT);
-		Bitmap image = Bitmap.createBitmap(1024, 512, Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(image);
-		canvas.drawRect(0, 0, 1024, 512, paint);
-		paint.setColor(0xFF224488);
-		paint.setTextSize(32);
-		for(int i = 0; i < headlines.length; i++){
-			canvas.drawText(headlines[i], 10, 32*(i+1), paint);
+		AssetManager assetManager = BitmapActivity.context.getAssets();
+		Bitmap bmp = null;
+		try{
+			InputStream inp = assetManager.open("widgets/breaking-news-widget.bmp");
+			bmp = Bitmap.createBitmap(BitmapFactory.decodeStream(inp, null, null));
+		} catch(Exception e){
+			Log.d("no", "nop");
 		}
-		return image;
+		Paint paint = new Paint();
+		paint.setTextAlign(Paint.Align.LEFT);
+		Bitmap bitmap = bmp.copy(Bitmap.Config.ARGB_8888, true);
+		Canvas canvas = new Canvas(bitmap);
+		paint.setColor(0xFF08418C);
+		paint.setTextSize(48);
+		String str = "";
+		for(int i = 0; i < Math.min(3, headlines.length); i++){
+			str += headlines[i] + "\n";
+		}
+		TextPaint textp = new TextPaint(paint);
+		textp.baselineShift = 100;
+		StaticLayout sl = new StaticLayout(str, textp, 504, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+		Log.d("lines", "" + sl.getLineCount());
+		/*for(int i = 0; i < headlines.length; i++){
+			canvas.drawText(headlines[i], 10, 132 + 48*(i+1), paint);
+		}*/
+		sl.draw(canvas);
+		return bitmap;
 	}
-
 }
