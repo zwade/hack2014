@@ -8,6 +8,8 @@ import java.util.Calendar;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import me.zwad3.mosaic.MosaicActivity;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
@@ -31,7 +33,8 @@ public class BreakingNewsWidget extends Widget {
 	int t;
 	String[] headlines;
 	
-	public BreakingNewsWidget(){
+	public BreakingNewsWidget(MosaicActivity a){
+		super(a);
 		t = 0;
 		headlines = new String[0];
 	}
