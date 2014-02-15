@@ -123,11 +123,6 @@ public class Renderer3D extends RendererActivity implements SensorEventListener 
         }
     }
 	
-	private int getDirection(float newD,float oldD) {
-		
-		
-		return 1;
-	}
 
 
 	private void updateGeomagneticField() {
