@@ -78,7 +78,7 @@ public class ExampleImplement extends Renderer3D {
 		if (!w.needsUpdate()) {
 			return false;
 		}
-		Shared.textureManager().deleteTextureId(w.renderBitmap(), w.toString(), false);
+		//Shared.textureManager().deleteTextureId(w.renderBitmap(), w.toString(), false);
 		Shared.textureManager().addTextureId(w.renderBitmap(), w.toString(), false);
 			
 		TextureVo texture = new TextureVo(w.toString());
