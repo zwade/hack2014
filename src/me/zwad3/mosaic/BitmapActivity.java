@@ -107,7 +107,7 @@ public class BitmapActivity extends Renderer3D implements SensorEventListener {
 	}
 	
 	public void updateScene(){
-		if(widget.needsUpdate()){
+		if(widget.needsUpdate(1000/40)){
 			if(Shared.textureManager().contains(widget.toString())){
 				Shared.textureManager().deleteTexture(widget.toString());
 			}
@@ -162,7 +162,7 @@ public class BitmapActivity extends Renderer3D implements SensorEventListener {
 	}
 	
 	private boolean loadTexture(Widget w) {
-		if (!w.needsUpdate()) {
+		if (!w.needsUpdate(1000/40)) {
 			return false;
 		}
 		Shared.textureManager().addTextureId(w.renderBitmap(), w.toString(), false);

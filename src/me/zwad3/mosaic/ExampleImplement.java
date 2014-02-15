@@ -146,23 +146,15 @@ public class ExampleImplement extends Renderer3D {
 			needsDelete = null;
 		}
 		long time = Calendar.getInstance().getTime().getTime();
-		long dx = time-lastUpdate;
+		long dt = time-lastUpdate;
 		lastUpdate = time;
-		TTL -= dx;
-		if (TTL < 0) {
-			for (Box i:objects.keySet()) {
-				if (objects.get(i).needsUpdate()) {
-					loadTexture(objects.get(i),i);
-				}
+		for (Box i:objects.keySet()) {
+			if (objects.get(i).needsUpdate((int)dt)) {
+				loadTexture(objects.get(i),i);
 			}
-			TTL = DELAY;
-		}
-		
+		}		
 	}
 	private boolean loadTexture(Widget w, Box b) {
-		if (!w.needsUpdate()) {
-			return false;
-		}
 		//Shared.textureManager().deleteTextureId(w.renderBitmap(), w.toString(), false);
 		try {
 			Shared.textureManager().deleteTexture(w.toString());

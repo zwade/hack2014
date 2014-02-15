@@ -39,22 +39,24 @@ import android.util.Xml;
 
 public class BreakingNewsWidget extends Widget {
 	
-	int t;
+	private final int threshold = 15000;
+	private int time = threshold;
 	String[] headlines;
 	
 	public BreakingNewsWidget(MosaicActivity a){
 		super(a);
-		t = 0;
 		headlines = new String[0];
 	}
 	
 	@Override
-	public boolean needsUpdate() {
-		t++;
-		if(t % 10 == 1){
+	public boolean needsUpdate(int dt) {
+		time -= dt;
+		if (time <= 0) {
+			time = threshold+time;
 			return true;
 		}
 		return false;
+
 	}
 	
 	@Override

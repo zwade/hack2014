@@ -14,6 +14,9 @@ import java.util.Calendar;
 import me.zwad3.mosaic.MosaicActivity;
 
 public class ClockWidget extends Widget {
+	
+	private final int threshold = 1000;
+	private int time = threshold;
 
 	public ClockWidget(MosaicActivity a) {
 		super(a);
@@ -21,8 +24,13 @@ public class ClockWidget extends Widget {
 	}
 
 	@Override
-	public boolean needsUpdate() {
-		return true;
+	public boolean needsUpdate(int dt) {
+		time -= dt;
+		if (time <= 0) {
+			time = threshold+time;
+			return true;
+		}
+		return false;
 	}
 
 	@Override

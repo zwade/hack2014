@@ -20,6 +20,9 @@ public class RandomPictureWidget extends Widget {
 	
 	private int updateCallCount;
 	
+	private final int threshold = 7500;
+	private int time = threshold;
+	
 	Bitmap image;
 	
 	public RandomPictureWidget(MosaicActivity a){
@@ -28,9 +31,13 @@ public class RandomPictureWidget extends Widget {
 	}
 	
 	@Override
-	public boolean needsUpdate() {
-		updateCallCount++;
-		return updateCallCount % 100 == 0;
+	public boolean needsUpdate(int dt) {
+		time -= dt;
+		if (time <= 0) {
+			time = threshold+time;
+			return true;
+		}
+		return false;
 	}
 
 	@Override

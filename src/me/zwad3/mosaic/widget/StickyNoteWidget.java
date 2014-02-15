@@ -26,7 +26,7 @@ public class StickyNoteWidget extends Widget implements VoiceListener{
 	}
 	
 	@Override
-	public boolean needsUpdate() {
+	public boolean needsUpdate(int dt) {
 		// TODO Auto-generated method stub
 		if (updated) {
 			updated = false;

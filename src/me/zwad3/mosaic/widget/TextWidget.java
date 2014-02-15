@@ -21,7 +21,7 @@ public class TextWidget extends Widget {
 	}
 	
 	@Override
-	public boolean needsUpdate() {
+	public boolean needsUpdate(int dt) {
 		return false;
 	}
 
