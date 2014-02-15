@@ -6,6 +6,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="glass_voice_trigger">Start Mosaic</string>
     <string name="text_trig">Start Texture</string>
+    <string name="splashTitle">Activity Chooser</string>
     
 
 </resources>
