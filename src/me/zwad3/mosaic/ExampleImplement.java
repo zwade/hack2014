@@ -46,6 +46,8 @@ public class ExampleImplement extends Renderer3D {
 	private VoiceListener _vl;
 	private int level = 0;
 	
+	private Box target;
+	
 	@Override
 	public void onCreate(Bundle sbi) {
 		if (level <= 1) {
@@ -83,10 +85,14 @@ public class ExampleImplement extends Renderer3D {
 	        	latestCoords[4] = scene.camera().position.y;
 	        	latestCoords[5] = scene.camera().position.z;
 	        	
+	        	target = null;
 	        	for (Box b:objects.keySet()) {
-	        		getDistance(b);
+	        		if (getDistance(b) < Math.sqrt(26)) {
+	        			Log.d("Clicked Entity", b.toString());
+	        			target = b;
+	        		}
 	        	}
-
+	        	
 	        	runOnUiThread(new Runnable() {
 				    public void run() {
 				        //Toast.makeText(activity, "Hello", Toast.LENGTH_SHORT).show();
@@ -183,10 +189,27 @@ public class ExampleImplement extends Renderer3D {
 	}
 	@Override
 	 public boolean onCreateOptionsMenu(Menu menu) {
+		Log.d("target", ""+target);
 	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.newitem, menu);
+	    if (target == null) {
+	    	inflater.inflate(R.menu.newitem, menu);
+	    } else {
+	    	inflater.inflate(R.menu.interactmenu, menu);
+	    }
 	    return true;
 	 }
+	 public boolean onPrepareOptionsMenu(Menu menu) {
+			Log.d("target", ""+target);
+		    MenuInflater inflater = getMenuInflater();
+		    menu.clear();
+
+		    if (target == null) {
+		    	inflater.inflate(R.menu.newitem, menu);
+		    } else {
+		    	inflater.inflate(R.menu.interactmenu, menu);
+		    }
+		    return true;
+		 }
 
 	 @Override
 	 public boolean onOptionsItemSelected(MenuItem item) {
@@ -206,6 +229,10 @@ public class ExampleImplement extends Renderer3D {
 	        case R.id.news:
 	        	needsUpdate = new BreakingNewsWidget(this);
 	        	return false;
+	        case R.id.delete:
+	        	scene.removeChild(target);
+	        	objects.remove(target);
+	        	target = null;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -237,7 +264,7 @@ public class ExampleImplement extends Renderer3D {
 		 
 		 float dist = -(n[0]*(p[0]-c[0])+n[1]*(p[1]-c[1])+n[2]*(p[2]-c[2]))/(t[0]*n[0]+t[1]*n[1]+t[2]*n[2]);
 		 
-		 
+		 Log.d("bounds", ""+dist);//(p[0]+dist*t[0])+" "+(p[1]+dist*t[1])+" "+(p[2]+dist*t[2]));		 
 		 return dist;
 		 
 	 }
