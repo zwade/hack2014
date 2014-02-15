@@ -264,7 +264,7 @@ public class ExampleImplement extends Renderer3D {
 		 
 		 float dist = -(n[0]*(p[0]-c[0])+n[1]*(p[1]-c[1])+n[2]*(p[2]-c[2]))/(t[0]*n[0]+t[1]*n[1]+t[2]*n[2]);
 		 
-		 return ((p[0]+dist*t[0]-c[0])< 1 && (p[1]+dist*t[1]-c[1]) < 1 && (p[2]+dist*t[2]-c[2]) < 1);
+		 return (Math.abs(p[0]+dist*t[0]-c[0])< 1 && Math.abs(p[1]+dist*t[1]-c[1]) < 1 && Math.abs(p[2]+dist*t[2]-c[2]) < 1);
 		 
 	 }
 
