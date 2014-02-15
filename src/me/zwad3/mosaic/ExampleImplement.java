@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.PopupMenu;
+import me.zwad3.mosaic.widget.BreakingNewsWidget;
 import me.zwad3.mosaic.widget.ClockWidget;
 import me.zwad3.mosaic.widget.StickyNoteWidget;
 import me.zwad3.mosaic.widget.TextWidget;
@@ -201,6 +202,9 @@ public class ExampleImplement extends Renderer3D {
 	        	return false;
 	        case R.id.sticky:
 	        	needsUpdate = new StickyNoteWidget(this);
+	        	return false;
+	        case R.id.news:
+	        	needsUpdate = new BreakingNewsWidget(this);
 	        	return false;
 	        default:
 	            return super.onOptionsItemSelected(item);

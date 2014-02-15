@@ -3,6 +3,7 @@
     <item android:id="@+id/blank" android:icon="@drawable/barong" android:title="@string/staticp"></item>
     <item android:id="@+id/clock" android:icon="@drawable/barong" android:title="@string/clock"></item>
     <item android:id="@+id/sticky" android:title="@string/sticky" android:icon="@drawable/barong"></item>
+    <item android:id="@+id/news" android:title="@string/news" android:icon="@drawable/barong"></item>
     
 
 </menu>

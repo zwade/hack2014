@@ -45,7 +45,6 @@ public class BitmapActivity extends Renderer3D implements SensorEventListener {
 	@Override
 	
     public void onCreate(Bundle savedInstanceState) {
-		loadTexture(widget);
 		Log.d("At Least", "it didn't hit this");
 		context = this;
         super.onCreate(savedInstanceState);
@@ -55,7 +54,6 @@ public class BitmapActivity extends Renderer3D implements SensorEventListener {
         mCompass = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mAccVals = new Number3d();
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        widget = new StickyNoteWidget(this);
 	}
 	/*@Override
 	public void onPause() {
@@ -105,6 +103,7 @@ public class BitmapActivity extends Renderer3D implements SensorEventListener {
 		mSensorManager.registerListener(this, mCompass, SensorManager.SENSOR_DELAY_UI);
 		
 		widget = new BreakingNewsWidget(this);
+		loadTexture(widget);
 	}
 	
 	public void updateScene(){

@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import me.zwad3.mosaic.BitmapActivity;
 import me.zwad3.mosaic.MosaicActivity;
+import me.zwad3.mosaic.MyApplication;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -50,50 +51,58 @@ public class BreakingNewsWidget extends Widget {
 	@Override
 	public boolean needsUpdate() {
 		t++;
-		if(t % 240 == 1){
-			HttpGet uri = new HttpGet("http://api.usatoday.com/open/breaking?expired=true&api_key=qgvnw4xg73mmsr6m9vuks5ke");
-			DefaultHttpClient client = new DefaultHttpClient();
-			HttpResponse resp = null;
-			try{
-				resp = client.execute(uri);
-			} catch(Exception e){
-				Log.d("ERROR", e.getMessage());
-				headlines = new String[]{"Can't connect to network."};
-				return true;
-			}
-			StatusLine status = resp.getStatusLine();
-			if(status.getStatusCode() != 200){
-				Log.d("ERROR", "HTTP error, invalid server status code.");
-				headlines = new String[]{"Can't connect to network."};
-				return true;
-			}
-			try{
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder builder = factory.newDocumentBuilder();
-				Document doc = builder.parse(resp.getEntity().getContent());
-				NodeList hls = doc.getElementsByTagName("title");
-				headlines = new String[hls.getLength()-2];
-				for(int i = 2; i < hls.getLength(); i++){
-					headlines[i-2] = hls.item(i).getTextContent();
-				}
-				if(headlines.length == 0){
-					headlines = new String[]{"No Breaking News"};
-					Log.d("Nonews", "No breaking news.");
-				}
-				Log.d("YAY", "success... " + Arrays.toString(headlines));
-			} catch(Exception e){
-				Log.d("ERROR", e.getMessage());
-				headlines = new String[]{"Can't connect to network."};
-				return true;
-			}
+		if(t % 10 == 1){
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	@Override
 	public Bitmap renderBitmap() {
+		
+		
+		HttpGet uri = new HttpGet("http://api.usatoday.com/open/breaking?expired=true&api_key=qgvnw4xg73mmsr6m9vuks5ke");
+		DefaultHttpClient client = new DefaultHttpClient();
+		HttpResponse resp = null;
+		try{
+			resp = client.execute(uri);
+		} catch(Exception e){
+			Log.d("ERROR", e.getMessage());
+			headlines = new String[]{"Can't connect to network."};
+			return makeImage(headlines);
+		}
+		StatusLine status = resp.getStatusLine();
+		if(status.getStatusCode() != 200){
+			Log.d("ERROR", "HTTP error, invalid server status code.");
+			headlines = new String[]{"Can't connect to network."};
+			return makeImage(headlines);
+		}
+		try{
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(resp.getEntity().getContent());
+			NodeList hls = doc.getElementsByTagName("title");
+			headlines = new String[hls.getLength()-2];
+			for(int i = 2; i < hls.getLength(); i++){
+				headlines[i-2] = hls.item(i).getTextContent();
+			}
+			if(headlines.length == 0){
+				headlines = new String[]{"No Breaking News"};
+				Log.d("Nonews", "No breaking news.");
+			}
+			Log.d("YAY", "success... " + Arrays.toString(headlines));
+		} catch(Exception e){
+			Log.d("ERROR", e.getMessage());
+			headlines = new String[]{"Can't connect to network."};
+			return makeImage(headlines);
+		}
 		Log.d("...", "rendering...");
-		AssetManager assetManager = BitmapActivity.context.getAssets();
+		return makeImage(headlines);
+	}
+		
+	private Bitmap makeImage (String[] headlines) {
+		
+		AssetManager assetManager = MyApplication.getAppContext().getAssets();
 		Bitmap bmp = null;
 		try{
 			InputStream inp = assetManager.open("widgets/breaking-news-widget.bmp");
@@ -108,6 +117,7 @@ public class BreakingNewsWidget extends Widget {
 		paint.setColor(0xFF08418C);
 		paint.setTextSize(48);
 		String str = "";
+		
 		for(int i = 0; i < Math.min(3, headlines.length); i++){
 			str += headlines[i] + "\n";
 		}
