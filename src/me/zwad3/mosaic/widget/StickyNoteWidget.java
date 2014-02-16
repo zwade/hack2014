@@ -4,6 +4,9 @@ import java.io.InputStream;
 
 import me.zwad3.mosaic.MosaicActivity;
 import me.zwad3.mosaic.MyApplication;
+import min3d.Shared;
+import min3d.objectPrimitives.Box;
+import min3d.vos.TextureVo;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -21,6 +24,8 @@ import android.util.Log;
 
 public class StickyNoteWidget extends Widget implements VoiceListener{
 
+	private Box myBox;
+	private Bitmap myImage;
 
 	private String myText;
 	private boolean updated = false;
@@ -82,6 +87,28 @@ public class StickyNoteWidget extends Widget implements VoiceListener{
 		Log.d("text",s);
 		
 	}
+
+	@Override
+	protected Bitmap doInBackground(Box... params) {
+		myBox = params[0];
+		myImage = renderBitmap();
+		return myImage;
+	}
+	@Override 
+	protected void onPostExecute(Bitmap img) {
+		try {
+			Shared.textureManager().deleteTexture(toString());
+		} catch (Exception e) {
+			
+		}
+		Shared.textureManager().addTextureId(img, toString(), false);
+			
+		TextureVo texture = new TextureVo(toString());
+
+		myBox.textures().add(texture);
+
+	}
+
 }
 
 

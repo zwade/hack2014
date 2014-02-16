@@ -13,6 +13,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import me.zwad3.mosaic.BitmapActivity;
 import me.zwad3.mosaic.MosaicActivity;
 import me.zwad3.mosaic.MyApplication;
+import min3d.Shared;
+import min3d.objectPrimitives.Box;
+import min3d.vos.TextureVo;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -39,6 +42,9 @@ import android.util.Log;
 import android.util.Xml;
 
 public class BreakingNewsWidget extends Widget {
+	
+	private Box myBox;
+	private Bitmap myImage;
 	
 	private final int threshold = 15000;
 	private int time = threshold;
@@ -135,5 +141,26 @@ public class BreakingNewsWidget extends Widget {
 		canvas.translate(8, 132);
 		sl.draw(canvas);
 		return bitmap;
+	}
+
+	@Override
+	protected Bitmap doInBackground(Box... params) {
+		myBox = params[0];
+		myImage = renderBitmap();
+		return myImage;
+	}
+	@Override 
+	protected void onPostExecute(Bitmap img) {
+		try {
+			Shared.textureManager().deleteTexture(toString());
+		} catch (Exception e) {
+			
+		}
+		Shared.textureManager().addTextureId(img, toString(), false);
+			
+		TextureVo texture = new TextureVo(toString());
+
+		myBox.textures().add(texture);
+
 	}
 }

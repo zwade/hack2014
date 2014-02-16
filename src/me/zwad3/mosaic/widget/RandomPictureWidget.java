@@ -4,6 +4,9 @@ import java.io.File;
 
 import me.zwad3.mosaic.BitmapActivity;
 import me.zwad3.mosaic.MosaicActivity;
+import min3d.Shared;
+import min3d.objectPrimitives.Box;
+import min3d.vos.TextureVo;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -17,6 +20,9 @@ import android.provider.MediaStore.Images.ImageColumns;
 import android.util.Log;
 
 public class RandomPictureWidget extends Widget {
+	
+	private Bitmap myImage;
+	private Box myBox;
 	
 	private int updateCallCount;
 	
@@ -57,6 +63,27 @@ public class RandomPictureWidget extends Widget {
 		canvas.drawRect(0, 0, 256, 256, paint);
 		canvas.drawBitmap(image, 0, 0, paint);*/
 		return img;
+	}
+
+	@Override
+	protected Bitmap doInBackground(Box... params) {
+		myBox = params[0];
+		myImage = renderBitmap();
+		return myImage;
+	}
+	@Override 
+	protected void onPostExecute(Bitmap img) {
+		try {
+			Shared.textureManager().deleteTexture(toString());
+		} catch (Exception e) {
+			
+		}
+		Shared.textureManager().addTextureId(img, toString(), false);
+			
+		TextureVo texture = new TextureVo(toString());
+
+		myBox.textures().add(texture);
+
 	}
 
 }

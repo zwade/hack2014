@@ -19,8 +19,14 @@ import java.util.Calendar;
 
 import me.zwad3.mosaic.MosaicActivity;
 import me.zwad3.mosaic.MyApplication;
+import min3d.Shared;
+import min3d.objectPrimitives.Box;
+import min3d.vos.TextureVo;
 
 public class ClockWidget extends Widget {
+	
+	private Box myBox;
+	private Bitmap myImage;
 	
 	private final int threshold = 1000;
 	private int time = threshold;
@@ -65,5 +71,26 @@ public class ClockWidget extends Widget {
 		canvas.drawText(new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()), 440, 287, paint);
 		
 		return bitmap;
+	}
+
+	@Override
+	protected Bitmap doInBackground(Box... params) {
+		myBox = params[0];
+		myImage = renderBitmap();
+		return myImage;
+	}
+	@Override 
+	protected void onPostExecute(Bitmap img) {
+		try {
+			Shared.textureManager().deleteTexture(toString());
+		} catch (Exception e) {
+			
+		}
+		Shared.textureManager().addTextureId(img, toString(), false);
+			
+		TextureVo texture = new TextureVo(toString());
+
+		myBox.textures().add(texture);
+
 	}
 }

@@ -69,7 +69,8 @@ public class ExampleImplement extends Renderer3D {
 			objects = new HashMap<Box, Widget>();
 		} else {
 			for (Box i:objects.keySet()) {
-				initTexture(objects.get(i),i);
+				//loadTexture(objects.get(i),i);
+				objects.get(i).execute(i);
 				scene.addChild(i);
 				
 			}
@@ -153,7 +154,8 @@ public class ExampleImplement extends Renderer3D {
             Log.d("pos, d, angles", x + " " + y + " " + z + " " + r + " " + tmp.rotation().x + " " + tmp.rotation().y + " " + tmp.rotation().z);
             
             //TextWidget txt = new TextWidget();
-            initTexture(needsUpdate, tmp);
+            //loadTexture(needsUpdate, tmp);
+            needsUpdate.execute(tmp);
             objects.put(tmp, needsUpdate);
             scene.addChild(tmp);
             
@@ -168,7 +170,8 @@ public class ExampleImplement extends Renderer3D {
 		lastUpdate = time;
 		for (Box i:objects.keySet()) {
 			if (objects.get(i).needsUpdate((int)dt)) {
-				loadTexture(objects.get(i),i);
+				//loadTexture(objects.get(i),i);
+				objects.get(i).execute(i);
 			}
 		}		
 	}
@@ -187,21 +190,7 @@ public class ExampleImplement extends Renderer3D {
 		
 		return true;
 	}
-	private boolean initTexture(Widget w, Box b) {
-		//Shared.textureManager().deleteTextureId(w.renderBitmap(), w.toString(), false);
-		try {
-			Shared.textureManager().deleteTexture(w.toString());
-		} catch (Exception e) {
-			
-		}
-		Shared.textureManager().addTextureId(w.renderBitmap(), w.toString(), false);
-			
-		TextureVo texture = new TextureVo(w.toString());
-
-		b.textures().add(texture);
-		
-		return true;
-	}
+	
 	@Override
 	 public boolean onCreateOptionsMenu(Menu menu) {
 		Log.d("target", ""+target);

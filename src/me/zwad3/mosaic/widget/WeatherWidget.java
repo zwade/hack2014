@@ -18,6 +18,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import me.zwad3.mosaic.BitmapActivity;
 import me.zwad3.mosaic.MosaicActivity;
 import me.zwad3.mosaic.MyApplication;
+import min3d.Shared;
+import min3d.objectPrimitives.Box;
+import min3d.vos.TextureVo;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
@@ -44,6 +47,9 @@ import android.util.Log;
 import android.util.Xml;
 
 public class WeatherWidget extends Widget {
+	
+	private Bitmap myImage;
+	private Box myBox;
 	
 	private final int threshold = 15000;
 	private int time = 0;
@@ -100,8 +106,7 @@ public class WeatherWidget extends Widget {
 			
 			Log.d("hey",""+weather.toString());
 			headlines = new ArrayList<String>();
-<<<<<<< HEAD
-			
+
 			
 			/**for(int i = 0; i < weather.length()-1; i++){
 				Set<String> s=weather.getJSONObject(i).keySet();
@@ -184,5 +189,27 @@ public class WeatherWidget extends Widget {
 		canvas.translate(8, 132);
 		sl.draw(canvas);
 		return bitmap;
+	}
+
+	@Override
+	protected Bitmap doInBackground(Box... params) {
+		myBox = params[0];
+		myImage = renderBitmap();
+		return myImage;
+		
+	}
+	@Override 
+	protected void onPostExecute(Bitmap img) {
+		try {
+			Shared.textureManager().deleteTexture(toString());
+		} catch (Exception e) {
+			
+		}
+		Shared.textureManager().addTextureId(img, toString(), false);
+			
+		TextureVo texture = new TextureVo(toString());
+
+		myBox.textures().add(texture);
+
 	}
 }
