@@ -121,7 +121,12 @@ public class WeatherWidget extends Widget {
 			headlines = new ArrayList<String>();
 			headlines.add("Can't connect to network.");
 			String [] dumb = new String[1];
-			dumb[0]=headlines.toString();
+			String listString = "";
+			for (String st : headlines)
+			{
+			    listString += st + "\t";
+			}
+			dumb[0]=listString;
 			return makeImage(dumb);
 		}
 		Log.d("...", "rendering...");
@@ -131,7 +136,12 @@ public class WeatherWidget extends Widget {
 		{
 			if(headlines.get(i)==">")
 			{
-				dumb[i]=headlines.subList(last,i).toString();
+				String listString0 = "";
+				for (String srt : headlines.subList(last,i))
+				{
+				    listString0 += srt + "\t";
+				}
+				dumb[i]=listString0;
 				last=i+1;
 			}
 		}
