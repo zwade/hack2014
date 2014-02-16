@@ -100,10 +100,15 @@ public class WeatherWidget extends Widget {
 			
 			Log.d("hey",""+weather.toString());
 			headlines = new ArrayList<String>();
+<<<<<<< HEAD
 			
 			
 			/**for(int i = 0; i < weather.length()-1; i++){
 				Set<String> s=weather.getJSONObject(i).keySet();
+=======
+			for(int i = 0; i < weather.length()-1; i++){
+				//Set<String> s=weather.getJSONObject(i).keys();
+>>>>>>> 7ef33df8615e5cd7ad6c6cc8a7c9004ad515544c
 				for(String str: s){
 						String[] eclipseIsStupid = new String[1];
 						eclipseIsStupid[0]=(str+": "+weather.getJSONObject(i).getString(str)+ ">");
