@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import org.json.*;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -45,7 +46,7 @@ import android.util.Xml;
 public class WeatherWidget extends Widget {
 	
 	private final int threshold = 15000;
-	private int time = threshold;
+	private int time = 0;
 	ArrayList<String> headlines;
 	
 	public WeatherWidget(MosaicActivity a){
@@ -70,11 +71,27 @@ public class WeatherWidget extends Widget {
 		HttpGet uri = new HttpGet("http://api.worldweatheronline.com/free/v1/weather.ashx?q=London&format=json&num_of_days=5&key=9dhmskjufq6yedjyy9j32awc");
 		
 		DefaultHttpClient client = new DefaultHttpClient();
-		JSONObject resp = null;
+		HttpResponse respo = null;
+		JSONObject resp;
 		try{
-			resp.getJSONArray("data");
+			respo = client.execute(uri);
+			InputStream is = respo.getEntity().getContent();
+			//ArrayList<Character> str = new ArrayList<Character>();
+			StringBuilder sb = new StringBuilder();
+			
+			int a = is.read(); 
+			
+			while(a != -1) {
+				sb.append((char)a);
+				a = is.read();
+			}
+			Log.d("string", ""+sb.toString());
+			//Log.d("Potential JSON", ""+respo.getEntity().getContent().);
+			resp = new JSONObject(respo.toString());
+			//JSONObject.
+			//resp.getJSONArray("data");
 		} catch(Exception e){
-			Log.d("ERROR", e.getMessage());
+			Log.d("ERROR", "Halp "+e.getMessage());
 			headlines = new ArrayList<String>();
 			headlines.add("Can't connect to network.");
 			String[] eclipseIsStupid = new String[1];
@@ -104,7 +121,12 @@ public class WeatherWidget extends Widget {
 			headlines = new ArrayList<String>();
 			headlines.add("Can't connect to network.");
 			String [] dumb = new String[1];
-			dumb[0]=headlines.toString();
+			String listString = "";
+			for (String st : headlines)
+			{
+			    listString += st + "\t";
+			}
+			dumb[0]=listString;
 			return makeImage(dumb);
 		}
 		Log.d("...", "rendering...");
@@ -114,7 +136,12 @@ public class WeatherWidget extends Widget {
 		{
 			if(headlines.get(i)==">")
 			{
-				dumb[i]=headlines.subList(last,i).toString();
+				String listString0 = "";
+				for (String srt : headlines.subList(last,i))
+				{
+				    listString0 += srt + "\t";
+				}
+				dumb[i]=listString0;
 				last=i+1;
 			}
 		}
