@@ -119,9 +119,10 @@ public class WeatherWidget extends Widget {
 	
 	@Override
 	public Bitmap renderBitmap() {
-		
+		Log.d("rendering", "...");
 		MyLocationListener bob =new MyLocationListener();
-		String ct=bob.getCity();
+		String ct="Philadelphia";//bob.getCity();
+		Log.d("city", "" + (ct == null));
 		HttpGet uri = new HttpGet("http://api.worldweatheronline.com/free/v1/weather.ashx?q="+ct+"&format=json&num_of_days=5&key=9dhmskjufq6yedjyy9j32awc");
 		
 		DefaultHttpClient client = new DefaultHttpClient();
@@ -146,7 +147,7 @@ public class WeatherWidget extends Widget {
 			//resp.getJSONArray("data");
 		} catch(Exception e){
 			Log.d("ERROR", "Halp "+e.getMessage());
-			return makeImage("Can't connect to network");
+			return null; //BUT DON'T REALLY
 		}
 		String message;
 		try{
@@ -183,10 +184,7 @@ public class WeatherWidget extends Widget {
 			
 			message = "\nTomorrow's Forecast is "+weather.getJSONArray("weatherDesc").getJSONObject(0).getString("value")+"\n\nWith a high of "+weather.getString("tempMaxF")+"\n\nAnd a Low of "+weather.getString("tempMinF");
 			
-		} catch(Exception e){
-			Log.d("ERROR", e.getMessage());
-			return makeImage("Can't connect to network.");
-		}
+		
 		/**Log.d("...", "rendering...");
 		String [] dumb = new String[100];
 		int last=0;
@@ -204,15 +202,13 @@ public class WeatherWidget extends Widget {
 			}
 		}
 		**/
-		return makeImage(message);
-	}
 		
-	private Bitmap makeImage (String headline) {
+		
 		
 		AssetManager assetManager = MyApplication.getAppContext().getAssets();
 		Bitmap bmp = null;
 		try{
-			InputStream inp = assetManager.open("widgets/breaking-news-widget.bmp");
+			InputStream inp = assetManager.open("widgets/weather-widget.bmp");
 			bmp = Bitmap.createBitmap(BitmapFactory.decodeStream(inp, null, null));
 		} catch(Exception e){
 			Log.d("no", "nop");
@@ -222,20 +218,42 @@ public class WeatherWidget extends Widget {
 		paint.setTypeface(Typeface.create("Roboto",Typeface.BOLD));
 		Bitmap bitmap = bmp.copy(Bitmap.Config.ARGB_8888, true);
 		Canvas canvas = new Canvas(bitmap);
-		paint.setColor(0xFF08418C);
+		paint.setColor(0xFFDDDDDD);
 		paint.setTextSize(36);
-		String str = "";
+		canvas.drawText("for " + ct, 226, 50, paint);
 		
-
-		TextPaint textp = new TextPaint(paint);
-		textp.baselineShift = 100;
-		StaticLayout sl = new StaticLayout(headline, textp, 496, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
-		Log.d("lines", "" + sl.getLineCount());
-		/*for(int i = 0; i < headlines.length; i++){
-			canvas.drawText(headlines[i], 10, 132 + 48*(i+1), paint);
-		}*/
-		canvas.translate(8, 132);
-		sl.draw(canvas);
+		String ctemp = resp.getJSONObject("data").getJSONArray("current_condition").getJSONObject(0).getString("temp_F");
+		paint.setColor(0xFF000000);
+		paint.setTextSize(200);
+		canvas.drawText(ctemp + "\u00B0", 8, 322, paint);
+		
+		JSONObject cw = resp.getJSONObject("data").getJSONArray("weather").getJSONObject(0);
+		paint.setColor(0xFFFF0000);
+		paint.setTextSize(100);
+		canvas.drawText(cw.getString("tempMaxF") + "\u00B0", 58, 154, paint);
+		paint.setColor(0xFF0000FF);
+		paint.setTextSize(100);
+		canvas.drawText(cw.getString("tempMinF") + "\u00B0", 58, 420, paint);
+		
+		JSONObject tom = resp.getJSONObject("data").getJSONArray("weather").getJSONObject(0);
+		
+		paint.setColor(0xFF0000FF);
+		paint.setTextSize(40);
+		canvas.drawText(tom.getString("tempMinF") + "\u00B0", 200, 508, paint);
+		
+		paint.setColor(0xFFFF0000);
+		canvas.drawText(tom.getString("tempMaxF") + "\u00B0", 276, 508, paint);
+		
+		paint.setColor(0xFFFFFFFF);
+		canvas.drawText("/", 250, 508, paint);
+		paint.setTextSize(32);
+		canvas.drawText("Tomorrow: ", 4, 504, paint);
+		canvas.drawText(tom.getJSONArray("weatherDesc").getJSONObject(0).getString("value"), 350, 504, paint);
+		
 		return bitmap;
+		} catch(Exception e){
+			Log.d("ERROR", e.getMessage());
+			return null; //CHANGE
+		}
 	}
 }
