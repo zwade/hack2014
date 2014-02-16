@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.widget.PopupMenu;
 import me.zwad3.mosaic.widget.BreakingNewsWidget;
 import me.zwad3.mosaic.widget.ClockWidget;
+import me.zwad3.mosaic.widget.RandomPictureWidget;
 import me.zwad3.mosaic.widget.StickyNoteWidget;
 import me.zwad3.mosaic.widget.TextWidget;
 import me.zwad3.mosaic.widget.VoiceListener;
@@ -241,6 +242,9 @@ public class ExampleImplement extends Renderer3D {
 	        	return false;
 	        case R.id.news:
 	        	needsUpdate = new BreakingNewsWidget(this);
+	        	return false;
+	        case R.id.pictures:
+	        	needsUpdate = new RandomPictureWidget(this);
 	        	return false;
 	        case R.id.delete:
 	        	needsDelete = target;

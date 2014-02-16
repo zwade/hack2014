@@ -80,7 +80,7 @@ public class BitmapActivity extends Renderer3D implements SensorEventListener {
 		
 		Log.d("hi", "init");
 		
-		_cube = new Box(1f,1f,1f);
+		_cube = new Box(2f,2f,2f);
 		scene.addChild(_cube);
 		
 		//Bitmap b = Utils.makeBitmapFromResourceId(this, R.drawable.uglysquares);
@@ -102,7 +102,7 @@ public class BitmapActivity extends Renderer3D implements SensorEventListener {
 		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
 		mSensorManager.registerListener(this, mCompass, SensorManager.SENSOR_DELAY_UI);
 		
-		widget = new CVWidget(this);
+		widget = new WeatherWidget(this);
 		loadTexture(widget);
 	}
 	
