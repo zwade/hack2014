@@ -7,7 +7,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
-public abstract class Widget extends AsyncTask<Box, Integer, Bitmap>{
+public abstract class Widget extends AsyncTask<Box, Bitmap, Bitmap>{
 	public MosaicActivity parent;
 	
 	public Widget(MosaicActivity a) {

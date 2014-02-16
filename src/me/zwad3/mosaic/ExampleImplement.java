@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.PopupMenu;
+import me.zwad3.mosaic.widget.BlankWidget;
 import me.zwad3.mosaic.widget.BreakingNewsWidget;
 import me.zwad3.mosaic.widget.ClockWidget;
 import me.zwad3.mosaic.widget.RandomPictureWidget;
@@ -165,6 +166,7 @@ public class ExampleImplement extends Renderer3D {
 			objects.remove(needsDelete);
 			needsDelete = null;
 		}
+		/**
 		long time = Calendar.getInstance().getTime().getTime();
 		long dt = time-lastUpdate;
 		lastUpdate = time;
@@ -173,7 +175,7 @@ public class ExampleImplement extends Renderer3D {
 				//loadTexture(objects.get(i),i);
 				objects.get(i).execute(i);
 			}
-		}		
+		}	**/	
 	}
 	private boolean loadTexture(Widget w, Box b) {
 		//Shared.textureManager().deleteTextureId(w.renderBitmap(), w.toString(), false);
@@ -225,7 +227,7 @@ public class ExampleImplement extends Renderer3D {
 	        	needsUpdate = new ClockWidget(this);
 	            return false;
 	        case R.id.blank:
-	        	needsUpdate = new TextWidget(null);
+	        	needsUpdate = new BlankWidget(null);
 	        	return false;
 	        case R.id.sticky:
 	        	needsUpdate = new StickyNoteWidget(this);

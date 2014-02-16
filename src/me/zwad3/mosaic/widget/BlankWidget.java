@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.widget.Button;
 
 public class BlankWidget extends Widget {
@@ -39,24 +40,48 @@ public class BlankWidget extends Widget {
 	@Override
 	protected Bitmap doInBackground(Box... params) {
 		
-		myBox = params[0];
-		image = renderBitmap();
-		return image;
+		while(true) {
+		
+			myBox = params[0];
+			image = renderBitmap();
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			publishProgress(image);
+		}
 	}
 	
 	@Override 
 	protected void onPostExecute(Bitmap img) {
+		
+
+	}
+	
+	@Override
+	protected void onProgressUpdate(Bitmap... img) {
+		String str = toString();
 		try {
-			Shared.textureManager().deleteTexture(toString());
+			Shared.textureManager().deleteTexture(str);
 		} catch (Exception e) {
 			
 		}
-		Shared.textureManager().addTextureId(img, toString(), false);
+		if (img[0] == null || str == null) {
+			Log.d("GDFSLKJDFSKLJDFS","FDJLSDFLJKDSLKJDLSFK");
+		}
+		
+		Shared.textureManager().addTextureId(img[0], str, true);
 			
-		TextureVo texture = new TextureVo(toString());
+		TextureVo texture = new TextureVo(str);
+		
+		Log.d("Up",""+texture);
 
-		myBox.textures().add(texture);
-
+		//myBox.textures().add(texture);
+		
 	}
 
 
