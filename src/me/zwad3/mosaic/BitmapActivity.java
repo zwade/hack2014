@@ -108,10 +108,11 @@ public class BitmapActivity extends Renderer3D implements SensorEventListener {
 	
 	public void updateScene(){
 		if(widget.needsUpdate(1000/40)){
-			if(Shared.textureManager().contains(widget.toString())){
+			/**if(Shared.textureManager().contains(widget.toString())){
 				Shared.textureManager().deleteTexture(widget.toString());
 			}
-			Shared.textureManager().addTextureId(widget.renderBitmap(), widget.toString());
+			Shared.textureManager().addTextureId(widget.renderBitmap(), widget.toString());**/
+			widget.renderBitmap((Box)_cube);
 		}
 	}
 	
@@ -165,12 +166,15 @@ public class BitmapActivity extends Renderer3D implements SensorEventListener {
 		if (!w.needsUpdate(1000/40)) {
 			return false;
 		}
-		Shared.textureManager().addTextureId(w.renderBitmap(), w.toString(), false);
+		/**Shared.textureManager().addTextureId(w.renderBitmap(), w.toString(), false);
 			
 		TextureVo texture = new TextureVo(w.toString());
 
 		_cube.textures().add(texture);
 		
+		return true;**/
+		
+		w.renderBitmap((Box)_cube);
 		return true;
 	}
 

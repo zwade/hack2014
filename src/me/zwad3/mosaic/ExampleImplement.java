@@ -34,6 +34,7 @@ import min3d.vos.TextureVo;
 
 public class ExampleImplement extends Renderer3D {
 	private SkyBox mSkyBox;
+	private ArrayList<Box> boxs;
 	private HashMap<Box, Widget> objects;
 	
 	
@@ -70,7 +71,7 @@ public class ExampleImplement extends Renderer3D {
 			objects = new HashMap<Box, Widget>();
 		} else {
 			for (Box i:objects.keySet()) {
-				initTexture(objects.get(i),i);
+				loadTexture(objects.get(i),i);
 				scene.addChild(i);
 				
 			}
@@ -107,7 +108,9 @@ public class ExampleImplement extends Renderer3D {
 	        }
 	        return super.onKeyDown(keycode, event);
 	}
-	@Override
+	public void registerTexture(TextureVo tv, int id) {
+		((Box)objects.keySet().toArray()[id]).textures().add(tv);
+	}
 	public void updateScene() {
 		//Log.d("Camera",""+scene.camera().target.x+" "+scene.camera().target.y+" "+scene.camera().target.z);
 		if (needsUpdate != null) {
@@ -154,14 +157,16 @@ public class ExampleImplement extends Renderer3D {
             Log.d("pos, d, angles", x + " " + y + " " + z + " " + r + " " + tmp.rotation().x + " " + tmp.rotation().y + " " + tmp.rotation().z);
             
             //TextWidget txt = new TextWidget();
-            initTexture(needsUpdate, tmp);
+            loadTexture(needsUpdate, tmp);
             objects.put(tmp, needsUpdate);
+            boxs.add(tmp);
             scene.addChild(tmp);
             
             needsUpdate = null;
 		} else if (needsDelete != null) {
 			scene.removeChild(needsDelete);
 			objects.remove(needsDelete);
+			boxs.remove(needsDelete);
 			needsDelete = null;
 		}
 		long time = Calendar.getInstance().getTime().getTime();
@@ -173,8 +178,11 @@ public class ExampleImplement extends Renderer3D {
 			}
 		}		
 	}
-	private boolean loadTexture(Widget w, Box b) {
-		//Shared.textureManager().deleteTextureId(w.renderBitmap(), w.toString(), false);
+	private void loadTexture(Widget w, Box b) {
+		
+		w.renderBitmap(b, boxs.indexOf(b)));
+		
+		/**Shared.textureManager().deleteTextureId(w.renderBitmap(), w.toString(), false);
 		try {
 			Shared.textureManager().deleteTexture(w.toString());
 		} catch (Exception e) {
@@ -187,22 +195,10 @@ public class ExampleImplement extends Renderer3D {
 		b.textures().add(texture);
 		
 		return true;
-	}
-	private boolean initTexture(Widget w, Box b) {
-		//Shared.textureManager().deleteTextureId(w.renderBitmap(), w.toString(), false);
-		try {
-			Shared.textureManager().deleteTexture(w.toString());
-		} catch (Exception e) {
-			
-		}
-		Shared.textureManager().addTextureId(w.renderBitmap(), w.toString(), false);
-			
-		TextureVo texture = new TextureVo(w.toString());
-
-		b.textures().add(texture);
+		**/
 		
-		return true;
 	}
+
 	@Override
 	 public boolean onCreateOptionsMenu(Menu menu) {
 		Log.d("target", ""+target);
