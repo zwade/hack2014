@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -37,6 +39,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -64,11 +71,56 @@ public class WeatherWidget extends Widget {
 		return false;
 
 	}
+	private class MyLocationListener implements LocationListener {
+
+	    private String city;
+	    public void onLocationChanged(Location loc) {
+	    	
+	        String longitude = "Longitude: " + loc.getLongitude();
+
+	        String latitude = "Latitude: " + loc.getLatitude();
+	        /*----------to get City-Name from coordinates ------------- */
+	        String cityName = null;
+	        Geocoder gcd = new Geocoder(MyApplication.getAppContext(), Locale.getDefault());
+	        List<Address> addresses;
+	        try {
+	            addresses = gcd.getFromLocation(loc.getLatitude(),
+	                    loc.getLongitude(), 1);
+	            if (addresses.size() > 0)
+	                System.out.println(addresses.get(0).getLocality());
+	            cityName = addresses.get(0).getLocality();
+	            city=cityName;
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+
+	    }
+	    public String getCity()
+	    {
+	    	return city;
+	    }
+	    @Override
+	    public void onProviderDisabled(String provider) {
+	        // TODO Auto-generated method stub
+	    }
+
+	    @Override
+	    public void onProviderEnabled(String provider) {
+	        // TODO Auto-generated method stub
+	    }
+
+	    @Override
+	    public void onStatusChanged(String provider, int status, Bundle extras) {
+	        // TODO Auto-generated method stub
+	    }
+	} 
 	
 	@Override
 	public Bitmap renderBitmap() {
 		
-		HttpGet uri = new HttpGet("http://api.worldweatheronline.com/free/v1/weather.ashx?q=London&format=json&num_of_days=5&key=9dhmskjufq6yedjyy9j32awc");
+		MyLocationListener bob =new MyLocationListener();
+		String ct=bob.getCity();
+		HttpGet uri = new HttpGet("http://api.worldweatheronline.com/free/v1/weather.ashx?q="+ct+"&format=json&num_of_days=5&key=9dhmskjufq6yedjyy9j32awc");
 		
 		DefaultHttpClient client = new DefaultHttpClient();
 		HttpResponse respo = null;
@@ -100,7 +152,7 @@ public class WeatherWidget extends Widget {
 			
 			Log.d("hey",""+weather.toString());
 			headlines = new ArrayList<String>();
-<<<<<<< HEAD
+//<<<<<<< HEAD
 			
 			
 			/**for(int i = 0; i < weather.length()-1; i++){
