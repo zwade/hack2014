@@ -85,7 +85,7 @@ public class WeatherWidget extends Widget {
 			JSONArray weather = resp.getJSONArray("weather");
 			headlines = new ArrayList<String>();
 			for(int i = 0; i < weather.length()-1; i++){
-				Set<String> s=weather.getJSONObject(i).keySet();
+				//Set<String> s=weather.getJSONObject(i).keys();
 				for(String str: s){
 						String[] eclipseIsStupid = new String[1];
 						eclipseIsStupid[0]=(str+": "+weather.getJSONObject(i).getString(str)+ ">");
