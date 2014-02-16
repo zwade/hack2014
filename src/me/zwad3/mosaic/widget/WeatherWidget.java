@@ -32,6 +32,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xmlpull.v1.XmlPullParser;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -54,6 +55,7 @@ public class WeatherWidget extends Widget {
 	
 	private final int threshold = 15000;
 	private int time = 0;
+	public Context con = MyApplication.getAppContext();
 	ArrayList<String> headlines;
 	
 	public WeatherWidget(MosaicActivity a){
@@ -81,7 +83,7 @@ public class WeatherWidget extends Widget {
 	        String latitude = "Latitude: " + loc.getLatitude();
 	        /*----------to get City-Name from coordinates ------------- */
 	        String cityName = null;
-	        Geocoder gcd = new Geocoder(MyApplication.getAppContext(), Locale.getDefault());
+	        Geocoder gcd = new Geocoder(con, Locale.getDefault());
 	        List<Address> addresses;
 	        try {
 	            addresses = gcd.getFromLocation(loc.getLatitude(),
