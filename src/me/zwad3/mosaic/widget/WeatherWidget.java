@@ -239,7 +239,7 @@ public class WeatherWidget extends Widget {
 		
 		paint.setColor(0xFF0000FF);
 		paint.setTextSize(40);
-		canvas.drawText(tom.getString("tempMinF") + "\u00B0", 200, 508, paint);
+		canvas.drawText(tom.getString("tempMinF") + "\u00B0", 195, 508, paint);
 		
 		paint.setColor(0xFFFF0000);
 		canvas.drawText(tom.getString("tempMaxF") + "\u00B0", 276, 508, paint);

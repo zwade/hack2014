@@ -4,7 +4,7 @@
     <item android:id="@+id/clock" android:icon="@drawable/clockicon" android:title="@string/clock"></item>
     <item android:id="@+id/sticky" android:title="@string/sticky" android:icon="@drawable/stickynoteicon"></item>
     <item android:id="@+id/news" android:title="@string/news" android:icon="@drawable/breakingnewsicon"></item>
-    <item android:id="@+id/pictures" android:title="@string/pix" android:icon="@drawable/blankicon"></item>
+    <item android:id="@+id/pictures" android:title="@string/pix" android:icon="@drawable/picturesicon"></item>
     <item android:id="@+id/weather" android:title="@string/weather" android:icon="@drawable/weathericon"></item>
     
 
