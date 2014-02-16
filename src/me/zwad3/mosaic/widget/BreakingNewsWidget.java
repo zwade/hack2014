@@ -40,8 +40,8 @@ import android.util.Xml;
 
 public class BreakingNewsWidget extends Widget {
 	
-	private final int threshold = 15000;
-	private int time = threshold;
+	private final int threshold = 60000;
+	private int time = 0;
 	String[] headlines;
 	
 	public BreakingNewsWidget(MosaicActivity a){

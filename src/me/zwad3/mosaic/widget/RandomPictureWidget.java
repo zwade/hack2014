@@ -20,7 +20,7 @@ public class RandomPictureWidget extends Widget {
 	
 	private int updateCallCount;
 	
-	private final int threshold = 7500;
+	private final int threshold = 60000;
 	private int time = 0;
 	
 	Bitmap image;

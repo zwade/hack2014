@@ -53,7 +53,7 @@ import android.util.Xml;
 
 public class WeatherWidget extends Widget {
 	
-	private final int threshold = 15000;
+	private final int threshold = 60000;
 	private int time = 0;
 	public Context con = MyApplication.getAppContext();
 	ArrayList<String> headlines;
