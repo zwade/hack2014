@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Camera;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -28,11 +29,11 @@ public class SurfaceDetect
 		}
 	}
 	public Bitmap getEdgeFromPhoto() {
-		AssetManager assetManager = MyApplication.getAppContext().getAssets();
 		Bitmap bmp = null;
 		try{
-			InputStream inp = assetManager.open("widgets/breaking-news-widget.bmp");
-			bmp = Bitmap.createBitmap(BitmapFactory.decodeStream(inp, null, null));
+			String str=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString()+"/wallpaper-2224.jpg";
+			Log.d("Str",str);
+			bmp = BitmapFactory.decodeFile(str);
 		} catch(Exception e){
 			Log.d("no", "nop");
 		}
@@ -40,7 +41,7 @@ public class SurfaceDetect
 	}
 	public Bitmap EdgePhoto()
 	{
-		Log.d("Edge", "was caled");
+		Log.d("Edge", "was called");
 		return getEdge(getPic());
 	}
 	private Bitmap getPic()
@@ -53,13 +54,16 @@ public class SurfaceDetect
 	}
 	private Bitmap getEdge(Bitmap b)
 	{
+		Log.d("getEdge", "was called");
 		EdgeDetector detector = new EdgeDetector();
-		 detector.setLowThreshold(0.5f);
-		 detector.setHighThreshold(1f);
+		 detector.setLowThreshold(100f);
+		 detector.setHighThreshold(100f);
 		 //apply it to an image
+		 Log.d("Debo", ""+b);
 		 detector.setSourceImage(b);
 		 detector.process();
 		 Bitmap edges = detector.getEdgesImage();
+		 Log.d("Debug",""+edges);
 		 return edges;
 	}
 	private Vector<HoughLine> getLine(Bitmap b)

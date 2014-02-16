@@ -539,10 +539,11 @@ public class EdgeDetector {
 			//NOTE: There is currently no mechanism for obtaining the edge data
 			//in any other format other than an INT_ARGB type BufferedImage.
 			//This may be easily remedied by providing alternative accessors.
-			Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-
+			if (edgesImage == null) {
+			edgesImage = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+			}
 			// Set the pixels
-			bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+			edgesImage.setPixels(pixels, 0, width, 0, 0, width, height);
 		}
 	 
 	}
