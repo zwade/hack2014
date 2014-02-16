@@ -102,7 +102,7 @@ public class BitmapActivity extends Renderer3D implements SensorEventListener {
 		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
 		mSensorManager.registerListener(this, mCompass, SensorManager.SENSOR_DELAY_UI);
 		
-		widget = new BreakingNewsWidget(this);
+		widget = new CVWidget(this);
 		loadTexture(widget);
 	}
 	

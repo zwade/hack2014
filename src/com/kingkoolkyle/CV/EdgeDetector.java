@@ -1,4 +1,4 @@
-package me.zwad3.mosaic;
+package com.kingkoolkyle.CV;
 
 
 import java.util.Arrays;

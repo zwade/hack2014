@@ -1,9 +1,14 @@
-package me.zwad3.mosaic;
+package com.kingkoolkyle.CV;
 
+import java.io.InputStream;
 import java.util.Vector;
 
+import me.zwad3.mosaic.MyApplication;
+
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Camera;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -22,8 +27,20 @@ public class SurfaceDetect
 			i++;
 		}
 	}
+	public Bitmap getEdgeFromPhoto() {
+		AssetManager assetManager = MyApplication.getAppContext().getAssets();
+		Bitmap bmp = null;
+		try{
+			InputStream inp = assetManager.open("widgets/breaking-news-widget.bmp");
+			bmp = Bitmap.createBitmap(BitmapFactory.decodeStream(inp, null, null));
+		} catch(Exception e){
+			Log.d("no", "nop");
+		}
+		return getEdge(bmp);
+	}
 	public Bitmap EdgePhoto()
 	{
+		Log.d("Edge", "was caled");
 		return getEdge(getPic());
 	}
 	private Bitmap getPic()
