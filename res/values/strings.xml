@@ -13,6 +13,7 @@
     <string name="sticky">Sticky Note</string>
     <string name="delete">Delete</string>
     <string name="pix">Pictures</string>
+    <string name="weather">Weather</string>
     
 
 </resources>

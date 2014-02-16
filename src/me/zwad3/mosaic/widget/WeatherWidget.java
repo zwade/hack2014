@@ -87,21 +87,22 @@ public class WeatherWidget extends Widget {
 			}
 			Log.d("string", ""+sb.toString());
 			//Log.d("Potential JSON", ""+respo.getEntity().getContent().);
-			resp = new JSONObject(respo.toString());
+			resp = new JSONObject(sb.toString());
 			//JSONObject.
 			//resp.getJSONArray("data");
 		} catch(Exception e){
 			Log.d("ERROR", "Halp "+e.getMessage());
-			headlines = new ArrayList<String>();
-			headlines.add("Can't connect to network.");
-			String[] eclipseIsStupid = new String[1];
-			eclipseIsStupid[0]=headlines.toString();
-			return makeImage(eclipseIsStupid);
+			return makeImage("Can't connect to network");
 		}
+		String message;
 		try{
-			JSONArray weather = resp.getJSONArray("weather");
+			JSONObject weather = resp.getJSONObject("data").getJSONArray("weather").getJSONObject(0);
+			
+			Log.d("hey",""+weather.toString());
 			headlines = new ArrayList<String>();
-			for(int i = 0; i < weather.length()-1; i++){
+			
+			
+			/**for(int i = 0; i < weather.length()-1; i++){
 				Set<String> s=weather.getJSONObject(i).keySet();
 				for(String str: s){
 						String[] eclipseIsStupid = new String[1];
@@ -116,20 +117,19 @@ public class WeatherWidget extends Widget {
 				Log.d("Nonews", "No weather.");
 			}
 			Log.d("YAY", "success... " + headlines);
+			**/
+			
+			//headlines = new ArrayList<String>();
+			//headlines.add(weather.getJSONArray("weatherDesc").getJSONObject(0).getString("value"));
+			
+			
+			message = "\nTomorrow's Forecast is "+weather.getJSONArray("weatherDesc").getJSONObject(0).getString("value")+"\n\nWith a high of "+weather.getString("tempMaxF")+"\n\nAnd a Low of "+weather.getString("tempMinF");
+			
 		} catch(Exception e){
 			Log.d("ERROR", e.getMessage());
-			headlines = new ArrayList<String>();
-			headlines.add("Can't connect to network.");
-			String [] dumb = new String[1];
-			String listString = "";
-			for (String st : headlines)
-			{
-			    listString += st + "\t";
-			}
-			dumb[0]=listString;
-			return makeImage(dumb);
+			return makeImage("Can't connect to network.");
 		}
-		Log.d("...", "rendering...");
+		/**Log.d("...", "rendering...");
 		String [] dumb = new String[100];
 		int last=0;
 		for(int i=0; i<headlines.size(); i++)
@@ -145,10 +145,11 @@ public class WeatherWidget extends Widget {
 				last=i+1;
 			}
 		}
-		return makeImage(dumb);
+		**/
+		return makeImage(message);
 	}
 		
-	private Bitmap makeImage (String[] headlines) {
+	private Bitmap makeImage (String headline) {
 		
 		AssetManager assetManager = MyApplication.getAppContext().getAssets();
 		Bitmap bmp = null;
@@ -167,12 +168,10 @@ public class WeatherWidget extends Widget {
 		paint.setTextSize(36);
 		String str = "";
 		
-		for(int i = 0; i < Math.min(3, headlines.length); i++){
-			str += "\u00BB" + headlines[i] + "\n\n";
-		}
+
 		TextPaint textp = new TextPaint(paint);
 		textp.baselineShift = 100;
-		StaticLayout sl = new StaticLayout(str, textp, 496, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+		StaticLayout sl = new StaticLayout(headline, textp, 496, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
 		Log.d("lines", "" + sl.getLineCount());
 		/*for(int i = 0; i < headlines.length; i++){
 			canvas.drawText(headlines[i], 10, 132 + 48*(i+1), paint);

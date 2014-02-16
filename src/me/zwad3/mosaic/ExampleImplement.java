@@ -23,6 +23,7 @@ import me.zwad3.mosaic.widget.RandomPictureWidget;
 import me.zwad3.mosaic.widget.StickyNoteWidget;
 import me.zwad3.mosaic.widget.TextWidget;
 import me.zwad3.mosaic.widget.VoiceListener;
+import me.zwad3.mosaic.widget.WeatherWidget;
 import me.zwad3.mosaic.widget.Widget;
 import min3d.Shared;
 import min3d.core.Object3dContainer;
@@ -245,6 +246,9 @@ public class ExampleImplement extends Renderer3D {
 	        	return false;
 	        case R.id.pictures:
 	        	needsUpdate = new RandomPictureWidget(this);
+	        	return false;
+	        case R.id.weather:
+	        	needsUpdate = new WeatherWidget(this);
 	        	return false;
 	        case R.id.delete:
 	        	needsDelete = target;
