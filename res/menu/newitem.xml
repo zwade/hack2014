@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/blank" android:icon="@drawable/blank-icon" android:title="@string/staticp"></item>
-    <item android:id="@+id/clock" android:icon="@drawable/clock-icon" android:title="@string/clock"></item>
-    <item android:id="@+id/sticky" android:title="@string/sticky" android:icon="@drawable/sticky-note-icon"></item>
-    <item android:id="@+id/news" android:title="@string/news" android:icon="@drawable/breaking-news-icon"></item>
-    <item android:id="@+id/pictures" android:title="@string/pix" android:icon="@drawable/blank-icon"></item>
-    <item android:id="@+id/weather" android:title="@string/weather" android:icon="@drawable/weather-icon"></item>
+    <item android:id="@+id/blank" android:icon="@drawable/blankicon" android:title="@string/staticp"></item>
+    <item android:id="@+id/clock" android:icon="@drawable/clockicon" android:title="@string/clock"></item>
+    <item android:id="@+id/sticky" android:title="@string/sticky" android:icon="@drawable/stickynoteicon"></item>
+    <item android:id="@+id/news" android:title="@string/news" android:icon="@drawable/breakingnewsicon"></item>
+    <item android:id="@+id/pictures" android:title="@string/pix" android:icon="@drawable/blankicon"></item>
+    <item android:id="@+id/weather" android:title="@string/weather" android:icon="@drawable/weathericon"></item>
     
 
 </menu>

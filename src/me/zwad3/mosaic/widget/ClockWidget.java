@@ -23,7 +23,7 @@ import me.zwad3.mosaic.MyApplication;
 public class ClockWidget extends Widget {
 	
 	private final int threshold = 1000;
-	private int time = threshold;
+	private int time = 0;
 
 	public ClockWidget(MosaicActivity a) {
 		super(a);

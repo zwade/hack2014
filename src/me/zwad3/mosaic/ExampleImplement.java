@@ -36,6 +36,7 @@ public class ExampleImplement extends Renderer3D {
 	private SkyBox mSkyBox;
 	private HashMap<Box, Widget> objects;
 	
+	
 	private long lastUpdate;
 	private long TTL = 500;
 	
@@ -234,6 +235,7 @@ public class ExampleImplement extends Renderer3D {
 	        case R.id.clock:
 	        	//.d("hi", "clock");
 	        	needsUpdate = new ClockWidget(this);
+	        	
 	            return false;
 	        case R.id.blank:
 	        	needsUpdate = new TextWidget(null);
