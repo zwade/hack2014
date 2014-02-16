@@ -82,7 +82,7 @@ public class ExampleImplement extends Renderer3D {
 	        	latestCoords[0] = scene.camera().target.x;
 	        	latestCoords[1] = scene.camera().target.y;
 	        	latestCoords[2] = scene.camera().target.z;
-	        	latestCoords[3] = scene.camera().position.z;
+	        	latestCoords[3] = scene.camera().position.x;
 	        	latestCoords[4] = scene.camera().position.y;
 	        	latestCoords[5] = scene.camera().position.z;
 	        	
@@ -126,13 +126,29 @@ public class ExampleImplement extends Renderer3D {
             
             //float den = (float) Math.sqrt(x*x+y*y+z*z);
             tmp.rotation().y =(float) ((float) Math.atan(x/z)*180/Math.PI);
-            //tmp.rotation().z =(float) ((float) 90-Math.acos(y/den)*180/Math.PI);
-            //tmp.rotation().x =(float) ((float) 90-Math.acos(z/den)*180/Math.PI);
+            //tmp.rotation().z = 0;//(float) ((float) 90-Math.acos(y/den)*180/Math.PI);
+            //tmp.rotation().x = 0;//(float) ((float) 90-Math.acos(z/den)*180/Math.PI);
             //tmp.rotation().z = (float) Math.cos(Math.acos(z/den)*Math.PI/180)*360;
             //tmp.rotation().x = (float) ((float) Math.sin(Math.acos(z/den)*Math.PI/180)*Math.sin(Math.acos(y/den)*Math.PI/180))*360;
             //tmp.rotation().y = (float) ((float) Math.sin(Math.acos(z/den)*Math.PI/180)*Math.cos(Math.acos(x/den)*Math.PI/180))*360;
         
             //("target and rotation",""+x+" "+y+" "+z+" "+tmp.rotation().x+" "+tmp.rotation().y+" "+tmp.rotation().z);
+            
+            //loat phi = (float)(Math.PI/2 - Math.atan(z));
+            //float theta = (float)(Math.atan2(y, x));
+            float r = 20;
+            
+            //tmp.position().x = (float)(r * Math.cos(theta) * Math.sin(phi));
+            //tmp.position().y = (float)(r * Math.sin(theta) * Math.sin(phi));
+            //tmp.position().z = (float)(r * Math.cos(phi));
+            
+            //tmp.rotation().x = (float)(180/Math.PI*Math.atan2(tmp.position().y, tmp.position().x));
+            //tmp.rotation().y = (float)(180/Math.PI*Math.atan2(tmp.position().x, tmp.position().z));
+            //tmp.rotation().z = (float)(180/Math.PI*Math.atan2(tmp.position().z, tmp.position().y));
+           
+            
+            
+            Log.d("pos, d, angles", x + " " + y + " " + z + " " + r + " " + tmp.rotation().x + " " + tmp.rotation().y + " " + tmp.rotation().z);
             
             //TextWidget txt = new TextWidget();
             initTexture(needsUpdate, tmp);
