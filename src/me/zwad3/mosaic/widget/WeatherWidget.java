@@ -154,8 +154,7 @@ public class WeatherWidget extends Widget {
 			
 			Log.d("hey",""+weather.toString());
 			headlines = new ArrayList<String>();
-//<<<<<<< HEAD
-			
+
 			
 			/**for(int i = 0; i < weather.length()-1; i++){
 				Set<String> s=weather.getJSONObject(i).keySet();
