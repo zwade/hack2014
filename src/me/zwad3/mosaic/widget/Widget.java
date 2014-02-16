@@ -11,6 +11,13 @@ public abstract class Widget{
 		parent = a;
 	}
 	
+	public boolean hasInteraction() {
+		return false;
+	}
+	public void onInteraction() {
+		
+	}
+	
 	public abstract boolean needsUpdate(int dt);
 		
 	public abstract Bitmap renderBitmap();

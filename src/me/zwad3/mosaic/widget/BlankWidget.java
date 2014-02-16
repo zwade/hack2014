@@ -4,6 +4,7 @@ import java.io.InputStream;
 
 import me.zwad3.mosaic.MosaicActivity;
 import me.zwad3.mosaic.MyApplication;
+import min3d.Shared;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,16 +31,21 @@ public class BlankWidget extends Widget {
 
 	@Override
 	public Bitmap renderBitmap() {
-		AssetManager assetManager = MyApplication.getAppContext().getAssets();
+		AssetManager assetManager = parent.getApplicationContext().getAssets();
 		Bitmap bmp = null;
+		InputStream inp;
 		try{
-			InputStream inp = assetManager.open("logo/mosaic-logo-large.bmp");
+			inp = assetManager.open("logo/mosaic-logo-large.png");
 			bmp = Bitmap.createBitmap(BitmapFactory.decodeStream(inp, null, null));
 		} catch(Exception e){
-			Log.d("no", "nop");
+			//Log.d("no", e.getMessage());
+			e.printStackTrace(); 
+			inp = null;
 		}
 		Bitmap bitmap = bmp.copy(Bitmap.Config.ARGB_8888, true);
+		//bmp = Bitmap.createBitmap(BitmapFactory.decodeStream(inp, null, null));//hi
 		Log.d("fun stuff", "rendering");
-		return bitmap;
+		Canvas canvas = new Canvas(bitmap);
+		return bitmap;//BitmapFactory.decodeStream(inp,null,null);
 	}
 }

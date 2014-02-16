@@ -8,6 +8,8 @@ import java.util.List;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Log;
@@ -17,8 +19,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.PopupMenu;
+import me.zwad3.mosaic.widget.BlankWidget;
 import me.zwad3.mosaic.widget.BreakingNewsWidget;
 import me.zwad3.mosaic.widget.ClockWidget;
+import me.zwad3.mosaic.widget.LauncherWidget;
 import me.zwad3.mosaic.widget.RandomPictureWidget;
 import me.zwad3.mosaic.widget.StickyNoteWidget;
 import me.zwad3.mosaic.widget.TextWidget;
@@ -34,7 +38,7 @@ import min3d.vos.TextureVo;
 
 public class ExampleImplement extends Renderer3D {
 	private SkyBox mSkyBox;
-	private HashMap<Box, Widget> objects;
+	public HashMap<Box, Widget> objects;
 	
 	
 	private long lastUpdate;
@@ -52,8 +56,18 @@ public class ExampleImplement extends Renderer3D {
 	
 	private Box target;
 	
+	List pkgAppsList;
+	PackageManager pm;
+	
 	@Override
 	public void onCreate(Bundle sbi) {
+		final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+		pm = this.getPackageManager();
+		mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+		pkgAppsList = MyApplication.getAppContext().getPackageManager().queryIntentActivities( mainIntent, 0);
+		for(int i = 0; i < pkgAppsList.size(); i++) {
+			Log.d(""+i, ""+pkgAppsList.get(i));
+		}
 		if (level <= 1) {
 			level++;
 		}
@@ -221,7 +235,16 @@ public class ExampleImplement extends Renderer3D {
 
 		    if (target == null) {
 		    	inflater.inflate(R.menu.newitem, menu);
+		    	for(int i = 0; i < pkgAppsList.size(); i++) {
+					//Log.d(""+i, ""+pkgAppsList.get(i));
+		    		//menu.add(((ResolveInfo)pkgAppsList.get(i)).resolvePackageName);
+		    		ResolveInfo ri = (ResolveInfo)pkgAppsList.get(i);
+		    		menu.add(0, i, Menu.NONE, ri.activityInfo.applicationInfo.loadLabel(pm).toString()).setIcon(ri.loadIcon(pm));
+				}
 		    } else {
+		    	if (objects.get(target).hasInteraction()) {
+		    		menu.add(0, -1, Menu.NONE, "Interact");
+		    	}
 		    	inflater.inflate(R.menu.interactmenu, menu);
 		    }
 		    return true;
@@ -238,7 +261,7 @@ public class ExampleImplement extends Renderer3D {
 	        	
 	            return false;
 	        case R.id.blank:
-	        	needsUpdate = new TextWidget(null);
+	        	needsUpdate = new BlankWidget(this);
 	        	return false;
 	        case R.id.sticky:
 	        	needsUpdate = new StickyNoteWidget(this);
@@ -255,7 +278,16 @@ public class ExampleImplement extends Renderer3D {
 	        case R.id.delete:
 	        	needsDelete = target;
 	        	target = null;
+	        	return false;
+	        case -1:
+	        	objects.get(target).onInteraction();
+	        	return false;
 	        default:
+	        	ResolveInfo ri = (ResolveInfo)pkgAppsList.get(item.getItemId());
+	        	needsUpdate = new LauncherWidget(this);
+	        	LauncherWidget lw = ((LauncherWidget)needsUpdate);
+	        	lw.setResolve(ri,pm);
+	        	Log.d("Options", "Looking for id "+item.getItemId());
 	            return super.onOptionsItemSelected(item);
 	    }
 	 }

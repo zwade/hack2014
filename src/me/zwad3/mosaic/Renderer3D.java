@@ -58,6 +58,8 @@ public class Renderer3D extends MosaicActivity implements SensorEventListener {
     private VoiceListener _vl;
     
 	 private boolean mTooSteep;
+	 
+	 public float myHeading;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,6 +119,7 @@ public class Renderer3D extends MosaicActivity implements SensorEventListener {
     		scene.camera().position.z = 0f; 
     		scene.camera().position.y = 0; 
          
+    		myHeading = mHeading;
         } else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
   
 			mAccVals.y = (float) (event.values[2] * FILTERING_FACTOR + mAccVals.y * (1.0 - FILTERING_FACTOR));
