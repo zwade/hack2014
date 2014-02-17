@@ -45,7 +45,7 @@ public class SplashActivity extends ListActivity
 	private ItemVo[] _items = {
 			new ItemVo("Widget Demo", WidgetDemo.class, "MainActivity.java"),
 			new ItemVo("Open Demo", OpenDemo.class, "BitmapActivity.java"),
-			new ItemVo("Test Activity", ExampleImplement.class, "BitmapActivity.java"),
+			new ItemVo("Blank Demo", ExampleImplement.class, "BitmapActivity.java"),
 	};
 	
     @Override
