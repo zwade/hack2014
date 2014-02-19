@@ -43,7 +43,7 @@ public class RandomPictureWidget extends Widget {
 	@Override
 	public Bitmap renderBitmap() {
 		Log.d("RPW", "rendering...");
-		File dir = new File("/sdcard/DCIM/Camera");//Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+		File dir = new File("/sdcard/DCIM/Camera");
 		Log.d("hi",""+dir.listFiles()[0].toString());
 		int ind = (int) (Math.random()*dir.listFiles().length);
 		image = BitmapFactory.decodeFile(dir.listFiles()[ind].toString());
@@ -51,11 +51,7 @@ public class RandomPictureWidget extends Widget {
 		Bitmap img = Bitmap.createBitmap(image, 500,400,1592, 1144);
 		
 		img = Bitmap.createScaledBitmap(img, 256, 256, true);
-		/*Canvas canvas = new Canvas(img);
-		Paint paint = new Paint();
-		paint.setColor(Color.BLUE);
-		canvas.drawRect(0, 0, 256, 256, paint);
-		canvas.drawBitmap(image, 0, 0, paint);*/
+		
 		return img;
 	}
 
